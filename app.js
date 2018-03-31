@@ -2,12 +2,14 @@ const path = require('path')
 
 const express = require('express')
 const session = require('express-session')
+const flash = require('connect-flash')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const expressValidator = require('express-validator')
 
 const routes = require('./routes/index')
 const errorHandlers = require('./handlers/errorHandlers')
+const helpers = require('./helpers')
 
 // creating express app
 const app = express()
@@ -48,9 +50,15 @@ app.use(
   })
 )
 
+// The flash middleware lets us req.flash('error', 'SOMETHING IS WRONG!'), which will pass the message to the next page
+app.use(flash())
+
 // pass flashes to our templates
 app.use((req, res, next) => {
+  res.locals.h = helpers
   res.locals.flashes = req.flash()
+  res.locals.currentPath = req.path
+  next()
 })
 
 // after all, routes
@@ -60,12 +68,15 @@ app.use('/', routes)
 app.use(errorHandlers.notFound)
 
 // let's see if this is just a validation error
-app.use(errorHandlers.flashValidationErrors)
+// app.use(errorHandlers.flashValidationErrors)
 
 if (app.get('env') === 'development') {
   // Development error handler - prints stack trace
   app.use(errorHandlers.developmentErrors)
 }
+
+// production error handler
+app.use(errorHandlers.productionErrors)
 
 // done! now export it to start from start.js
 module.exports = app
