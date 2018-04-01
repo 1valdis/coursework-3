@@ -1,5 +1,13 @@
 .nav-link img{
   height: 1em;
   width: 1em;
-  margin-right: 0.5em;
+}
+.navbar-brand .import{
+  color: rgb(37,151,213)
+}
+.navbar-brand .teh{
+  color:rgb(216,10,58)
+}
+.navbar-brand .servis{
+  color:rgb(12,79,158)
 }

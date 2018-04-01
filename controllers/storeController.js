@@ -1,3 +1,3 @@
 exports.getIndex = (req, res) => {
-  res.render('layout', { title: 'Главная' })
+  res.render('index', { title: 'Главная' })
 }
