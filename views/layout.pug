@@ -9,8 +9,25 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0, shrink-to-fit=no")
   body
-  
-        
+    .navbar.navbar-expand-md.navbar-light.bg-light
+    
+      a.navbar-brand(href="/") ИмпортТехСервис
+      
+      button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbar' aria-controls='navbar' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      
+      .collapse.navbar-collapse#navbar
+        .nav.navbar-nav.mr-auto
+          a.nav-link(href="/catalogue") Каталог
+          a.nav-link(href="/share") Акции
+          a.nav-link(href="/warranty") Гарантия
+          a.nav-link(href="/delivery") Доставка
+          a.nav-link(href="/about") О нас
+        .nav.navbar-nav
+          a.nav-link(href="/basket")
+            img(src="/icons/shopping-cart.svg")
+            span= 0
+      
     script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')

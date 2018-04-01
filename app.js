@@ -2,10 +2,13 @@ const path = require('path')
 
 const express = require('express')
 const session = require('express-session')
+const RedisStore = require('connect-redis')(session)
 const flash = require('connect-flash')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const expressValidator = require('express-validator')
+
+const pgp = require('pg-promise')
 
 const routes = require('./routes/index')
 const errorHandlers = require('./handlers/errorHandlers')
@@ -37,13 +40,19 @@ app.use(cookieParser())
 // methods for data validation
 app.use(expressValidator())
 
-// session for flashes
-// TODO kool session in Postgres
+// session for flashes and basket
 app.use(
   session({
+    store: new RedisStore({
+      host: process.env.REDIS_IP,
+      port: process.env.REDIS_PORT,
+      logErrors: true,
+      ttl: 60 * 60 * 24 * 3 // 3 days
+    }),
     secret: process.env.SECRET,
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-    cookie: { secure: true },
+    maxAge: 1000 * 60 * 60 * 24 * 3, // 3 days
+    // if we're developing, cookie should not be secure for session to work, because we don't have https on localhost
+    cookie: { secure: app.get('env') !== 'development' },
     resave: false,
     saveUninitialized: false,
     rolling: true
