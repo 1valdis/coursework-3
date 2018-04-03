@@ -2,9 +2,10 @@ doctype html
 html(lang="en")
   head
     title= `${title} | ${h.siteName}`
-    link(rel="stylesheet", href="/style.css")
     //- adding Bootstrap
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+    //- custom styling
+    link(rel="stylesheet", href="/style.css")
     //- just some standard meta
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0, shrink-to-fit=no")
@@ -23,7 +24,7 @@ html(lang="en")
         .collapse.navbar-collapse#navbar
           .nav.navbar-nav.mr-auto
             a.nav-link(href="/catalogue") Каталог
-            a.nav-link(href="/share") Акции
+            a.nav-link(href="/rebates") Акции
             a.nav-link(href="/warranty") Гарантия
             a.nav-link(href="/delivery") Доставка
             a.nav-link(href="/about") О нас

@@ -11,3 +11,6 @@
 .navbar-brand .servis{
   color:rgb(12,79,158)
 }
+.navbar-brand{
+  padding-top:0;
+}

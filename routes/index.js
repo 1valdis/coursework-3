@@ -5,12 +5,10 @@ const storeController = require('../controllers/storeController')
 const { catchAsyncErrors } = require('../handlers/errorHandlers')
 
 router.get('/', storeController.getIndex)
-
-router.get('/flash', function (req, res) {
-  // Set a flash message by passing the key, followed by the value, to req.flash().
-  req.flash('primary', 'Flash is back!')
-  req.flash('warning', 'Oh shit!')
-  res.redirect('/')
-})
+router.get('/catalogue', storeController.getCatalogue)
+router.get('/rebates', storeController.getRebates)
+router.get('/warranty', storeController.getWarranty)
+router.get('/delivery', storeController.getDelivery)
+router.get('/about', storeController.getAbout)
 
 module.exports = router

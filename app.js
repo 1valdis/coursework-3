@@ -8,8 +8,6 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const expressValidator = require('express-validator')
 
-const pgp = require('pg-promise')
-
 const routes = require('./routes/index')
 const errorHandlers = require('./handlers/errorHandlers')
 const helpers = require('./helpers')
