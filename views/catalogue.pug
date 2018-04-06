@@ -4,3 +4,10 @@ include mixins/_pageH1
 
 block content
   +pageH1('Каталог')
+  .row
+    each c in categories
+      .card.col-sm-12.col-md-6.col-lg-3
+        .card-body.text-center
+          img.card-img-top
+          a(href=`categories/${c.id}`): h5.card-title= c.name
+          p.card-text= c.description

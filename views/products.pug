@@ -1,0 +1,15 @@
+extends layout
+
+include mixins/_pageH1
+
+block content
+  +pageH1(title)
+  .row
+    each p in products
+      .card.col-sm-12.col-md-6.col-lg-3
+        .card-body.text-center
+          img.card-img-top
+          a(href=`products/${p.id}`): h5.card-title= p.name
+          p.card-text= p.description
+    if products.length===0
+      p= 'Здесь пока ничего нет...'
