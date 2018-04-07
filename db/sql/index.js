@@ -8,7 +8,8 @@ module.exports = {
     byId: sql('categories/byId.sql')
   },
   products: {
-    byCategory: sql('products/byCategory.sql')
+    byCategory: sql('products/byCategory.sql'),
+    byId: sql('products/byId.sql')
   },
   discounts: {
     all: sql('discounts/all.sql')

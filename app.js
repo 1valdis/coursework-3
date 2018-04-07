@@ -53,7 +53,8 @@ app.use(
     cookie: { secure: app.get('env') !== 'development' },
     resave: false,
     saveUninitialized: false,
-    rolling: true
+    rolling: true,
+    unset: 'destroy'
   })
 )
 
@@ -65,6 +66,14 @@ app.use((req, res, next) => {
   res.locals.h = helpers
   res.locals.flashes = req.flash()
   res.locals.currentPath = req.path
+
+  const countInBasket = req.session
+    ? req.session.basket.reduce((prev, cur) => {
+      return prev + cur.quantity
+    }, 0)
+    : 0
+
+  res.locals.countInBasket = countInBasket
   next()
 })
 

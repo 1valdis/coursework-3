@@ -9,6 +9,9 @@ class ProductsRepository {
   byCategory (id) {
     return this.db.any(sql.byCategory, id)
   }
+  byId (id) {
+    return this.db.one(sql.byId, id)
+  }
 }
 
 module.exports = ProductsRepository
