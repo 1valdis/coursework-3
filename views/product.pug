@@ -1,10 +1,12 @@
 extends layout
 
+include mixins/_pageH1
+
 block content
+  +pageH1(product.name)
   .row.mt-3
     img.col-md-6.col-sm-12
     .container.col-md-6.col-sm-12
-      h2= product.name
       p= product.description
       form(method="post" action="/basket").form-inline
         label(for="quantity") Количество

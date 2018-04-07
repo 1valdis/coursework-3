@@ -1,0 +1,1 @@
+select * from products where id in ($1:csv)

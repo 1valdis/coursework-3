@@ -1,0 +1,7 @@
+extends layout
+
+include mixins/_pageH1
+
+block content
+  +pageH1(title)
+  pre= JSON.stringify(basket)

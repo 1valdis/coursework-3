@@ -22,12 +22,29 @@ exports.getDiscounts = (req, res) => {
   res.render('discounts', { title: 'Акции' })
 }
 
+exports.getBasket = async (req, res) => {
+  const basket = (await db.products.byIds(
+    req.session.basket.map(p => p.product_id)
+  )).map(p => {
+    const product = p
+    product.quantity = req.session.basket.find(
+      i => console.log(i, product)
+    )
+    
+    return product
+  })
+  console.log(basket)
+  res.render('basket', { title: 'Корзина', basket })
+}
+
 exports.addToBasket = async (req, res) => {
   if (!req.session.basket) {
     req.session.basket = []
   }
 
-  const existing = req.session.basket.find(p => p.product_id === req.body.product_id)
+  const existing = req.session.basket.find(
+    p => p.product_id === req.body.product_id
+  )
   if (existing === undefined) {
     req.session.basket.push({
       product_id: req.body.product_id,
