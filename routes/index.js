@@ -11,7 +11,8 @@ router.get('/products/:id', catchAsyncErrors(storeController.getProductById))
 router.get('/discounts', storeController.getDiscounts)
 
 router.get('/basket', catchAsyncErrors(storeController.getBasket))
-router.post('/basket', catchAsyncErrors(storeController.addToBasket))
+router.post('/basket/add', catchAsyncErrors(storeController.addToBasket))
+router.post('/basket/remove', catchAsyncErrors(storeController.removeFromBasket))
 
 router.get('/warranty', storeController.getWarranty)
 router.get('/delivery', storeController.getDelivery)

@@ -14,3 +14,6 @@
 .navbar-brand{
   padding-top:0;
 }
+html{
+  min-width:300px;
+}

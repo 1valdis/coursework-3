@@ -23,17 +23,21 @@ exports.getDiscounts = (req, res) => {
 }
 
 exports.getBasket = async (req, res) => {
-  const basket = (await db.products.byIds(
-    req.session.basket.map(p => p.product_id)
-  )).map(p => {
-    const product = p
-    product.quantity = req.session.basket.find(
-      i => console.log(i, product)
-    )
-    
-    return product
-  })
-  console.log(basket)
+  const ids = req.session.basket.map(p => p.product_id)
+  let basket
+
+  if (ids.length !== 0) {
+    basket = (await db.products.byIds(ids)).map(p => {
+      const product = p
+      product.quantity = req.session.basket.find(
+        i => i.product_id === p.id
+      ).quantity
+      return product
+    })
+  }else{
+    basket=[]
+  }
+  // console.log(basket)
   res.render('basket', { title: 'Корзина', basket })
 }
 
@@ -55,6 +59,18 @@ exports.addToBasket = async (req, res) => {
   }
 
   req.flash('success', 'Успешно добавлен в <a href="/basket">корзину</a>!')
+  res.redirect('back')
+}
+
+exports.removeFromBasket = async (req, res) => {
+  if (!req.session || !req.session.basket) {
+    req.flash('danger', 'Корзина пуста')
+    res.redirect('back')
+    return
+  }
+
+  req.session.basket = req.session.basket.filter(p => p.id !== req.body.id)
+  req.flash('success', 'Удалено')
   res.redirect('back')
 }
 

@@ -4,4 +4,21 @@ include mixins/_pageH1
 
 block content
   +pageH1(title)
-  pre= JSON.stringify(basket)
+  if basket.length===0
+    p
+      | Здесь пока пусто... Наведайтесь в 
+      a(href="/catalogue") Каталог
+      |  и закажите что-нибудь ;)
+  each p in basket
+    .row.border
+      .col-sm-12.col-md-5
+        img.img-thumbnail(src="http://via.placeholder.com/350x150")
+      .col-sm-12.col-md-4
+        a(href=`/products/${p.id}`)
+          h5= p.name
+        p= p.description
+      .col-sm-12.col-md-3
+        h2.text-center= p.quantity+' шт.'
+        form.text-center(method="POST" action="/basket/remove")
+          button.btn.btn-outline-danger Удалить
+          input(type="hidden" name="product_id" value=p.id)
