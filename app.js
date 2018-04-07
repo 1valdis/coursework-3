@@ -67,7 +67,7 @@ app.use((req, res, next) => {
   res.locals.flashes = req.flash()
   res.locals.currentPath = req.path
 
-  const countInBasket = req.session
+  const countInBasket = (req.session && req.session.basket)
     ? req.session.basket.reduce((prev, cur) => {
       return prev + cur.quantity
     }, 0)
