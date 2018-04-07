@@ -23,6 +23,10 @@ exports.getDiscounts = (req, res) => {
 }
 
 exports.getBasket = async (req, res) => {
+  if (!req.session || !req.session.basket) {
+    return res.render('basket', { title: 'Корзина', basket: [] })
+  }
+
   const ids = req.session.basket.map(p => p.product_id)
   let basket
 
@@ -34,8 +38,8 @@ exports.getBasket = async (req, res) => {
       ).quantity
       return product
     })
-  }else{
-    basket=[]
+  } else {
+    basket = []
   }
   // console.log(basket)
   res.render('basket', { title: 'Корзина', basket })
