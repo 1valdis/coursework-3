@@ -1,6 +1,9 @@
 extends layout
 
 block content
-  h2= status
-  p= message
+  .row
+    .mt-4.col-auto
+      h2= status
+      p= message
+    img.p-0.col-auto.d-none.d-md-block(src='/travolta.jpg')
   pre.error!= stackHighlighted

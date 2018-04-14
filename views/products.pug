@@ -14,3 +14,4 @@ block content
           img.card-img-top
           a(href=`/products/${p.id}`): h5.card-title= p.name
           p.card-text= h.cutString(p.description, 100)
+          h5.card-text= p.cost+' грн.'

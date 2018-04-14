@@ -8,6 +8,7 @@ block content
     img.col-md-6.col-sm-12
     .container.col-md-6.col-sm-12
       p= product.description
+      h5= product.cost+' грн.'
       form(method="post" action="/basket/add/").form-inline
         label(for="quantity") Количество
         input.form-control.mr-3.ml-3(type="number" name="quantity" id="quantity" min=1 max=product.count_available value=1)
