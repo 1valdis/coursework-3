@@ -12,8 +12,8 @@ module.exports = {
     byId: sql('products/byId.sql'),
     byIds: sql('products/byIds.sql')
   },
-  discounts: {
-    all: sql('discounts/all.sql')
+  baskets: {
+    bySessionID: sql('baskets/bySessionID.sql')
   }
 }
 

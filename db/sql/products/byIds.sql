@@ -1,1 +1,1 @@
-select id::text, name, description from products where id in ($1:csv)
+select id::text, name, description, basic_cost as basic_cost from products where id in ($1:csv)

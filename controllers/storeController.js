@@ -18,11 +18,9 @@ exports.getProductById = async (req, res) => {
   const product = await db.products.byId(req.params.id)
   res.render('product', { title: product.name, product })
 }
-exports.getDiscounts = (req, res) => {
-  res.render('discounts', { title: 'Акции' })
-}
 
 exports.getBasket = async (req, res) => {
+  
   if (!req.session || !req.session.basket) {
     return res.render('basket', { title: 'Корзина', basket: [] })
   }

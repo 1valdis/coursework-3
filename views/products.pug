@@ -10,6 +10,6 @@ block content
         .card-body.text-center
           img.card-img-top
           a(href=`/products/${p.id}`): h5.card-title= p.name
-          p.card-text= p.description
+          p.card-text= (p.description && p.description.length > 100) ? p.description.slice(0, 100) + '...' : p.description
     if products.length===0
       p= 'Здесь пока ничего нет...'

@@ -8,7 +8,6 @@ router.get('/', storeController.getIndex)
 router.get('/catalogue', catchAsyncErrors(storeController.getCatalogue))
 router.get('/categories/:id', catchAsyncErrors(storeController.getProductsByCategory))
 router.get('/products/:id', catchAsyncErrors(storeController.getProductById))
-router.get('/discounts', storeController.getDiscounts)
 
 router.get('/basket', catchAsyncErrors(storeController.getBasket))
 router.post('/basket/add', catchAsyncErrors(storeController.addToBasket))

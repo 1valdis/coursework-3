@@ -19,6 +19,7 @@ block content
         p= p.description
       .col-sm-12.col-md-3
         h2.text-center= p.quantity+' шт.'
+        //-h2.text-center= 
         form.text-center(method="POST" action="/basket/remove")
           button.btn.btn-outline-danger Удалить
           input(type="hidden" name="product_id" value=p.id)
