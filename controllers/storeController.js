@@ -39,7 +39,7 @@ exports.getBasket = async (req, res) => {
   } else {
     basket = []
   }
-  // console.log(basket)
+
   res.render('basket', { title: 'Корзина', basket })
 }
 

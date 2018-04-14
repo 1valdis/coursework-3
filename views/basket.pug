@@ -4,6 +4,7 @@ include mixins/_pageH1
 
 block content
   +pageH1(title)
+  pre= JSON.stringify(basket)
   if basket.length===0
     p
       | Здесь пока пусто... Наведайтесь в 

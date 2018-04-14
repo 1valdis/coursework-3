@@ -13,7 +13,7 @@ class ProductsRepository {
     return this.db.one(sql.byId, id)
   }
   byIds (idArray) {
-    return this.db.any(sql.byIds, idArray)
+    return this.db.any(sql.byIds, {idArray})
   }
 }
 
