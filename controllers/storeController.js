@@ -20,7 +20,6 @@ exports.getProductById = async (req, res) => {
 }
 
 exports.getBasket = async (req, res) => {
-  
   if (!req.session || !req.session.basket) {
     return res.render('basket', { title: 'Корзина', basket: [] })
   }
@@ -71,7 +70,10 @@ exports.removeFromBasket = async (req, res) => {
     return
   }
 
-  req.session.basket = req.session.basket.filter(p => p.id !== req.body.id)
+  req.session.basket = req.session.basket.filter(
+    p => p.product_id !== req.body.product_id
+  )
+
   req.flash('success', 'Удалено')
   res.redirect('back')
 }
