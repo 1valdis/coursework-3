@@ -12,7 +12,7 @@ exports.getProductsByCategory = async (req, res) => {
     db.products.byCategory(req.params.id),
     db.categories.byId(req.params.id)
   ])
-  res.render('products', { title: category.name, products })
+  res.render('products', { title: category.name, products, category })
 }
 exports.getProductById = async (req, res) => {
   const product = await db.products.byId(req.params.id)

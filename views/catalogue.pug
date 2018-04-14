@@ -10,4 +10,4 @@ block content
         .card-body.text-center
           img.card-img-top
           a(href=`categories/${c.id}`): h5.card-title= c.name
-          p.card-text= c.description
+          p.card-text= h.cutString(c.description, 100)

@@ -1,5 +1,4 @@
 exports.siteName = 'ИмпортТехСервис'
 
-exports.menu = [
-  {url: '/products'}
-]
+exports.cutString = (str, maxSymbols) =>
+  (str && str.length > maxSymbols ? str.slice(0, maxSymbols) + '...' : str)

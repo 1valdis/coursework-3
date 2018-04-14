@@ -4,7 +4,7 @@ include mixins/_pageH1
 
 block content
   +pageH1(title)
-  pre= JSON.stringify(basket)
+  //-pre= JSON.stringify(basket)
   if basket.length===0
     p
       | Здесь пока пусто... Наведайтесь в 
@@ -17,7 +17,7 @@ block content
       .col-sm-12.col-md-4
         a(href=`/products/${p.id}`)
           h5= p.name
-        p= p.description
+        p= h.cutString(p.description,100)
       .col-sm-12.col-md-3
         h2.text-center= p.quantity+' шт.'
         //-h2.text-center= 

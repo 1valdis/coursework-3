@@ -3,13 +3,14 @@ extends layout
 include mixins/_pageH1
 
 block content
-  +pageH1(title)
+  +pageH1(category.name)
+  p= category.description
   .row
+    if products.length===0
+      p= 'Здесь пока ничего нет...'
     each p in products
       .card.col-sm-12.col-md-6.col-lg-3
         .card-body.text-center
           img.card-img-top
           a(href=`/products/${p.id}`): h5.card-title= p.name
-          p.card-text= (p.description && p.description.length > 100) ? p.description.slice(0, 100) + '...' : p.description
-    if products.length===0
-      p= 'Здесь пока ничего нет...'
+          p.card-text= h.cutString(p.description, 100)
