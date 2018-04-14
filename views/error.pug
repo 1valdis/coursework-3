@@ -5,5 +5,14 @@ block content
     .mt-4.col-auto
       h2= status
       p= message
-    img.p-0.col-auto.d-none.d-md-block(src='/travolta.jpg')
+    img#travolta.p-0.col-auto.d-none.d-md-block()
   pre.error!= stackHighlighted
+  script.
+    function applyTravolta(){
+      if (window.matchMedia('(min-width: 768px)').matches){
+        document.getElementById('travolta').src='/travolta.jpg'
+        window.removeEventListener('resize', applyTravolta, false)
+      }
+    }
+    window.addEventListener('resize', applyTravolta, false)
+    applyTravolta()

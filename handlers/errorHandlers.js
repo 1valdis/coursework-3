@@ -15,6 +15,7 @@ exports.developmentErrors = (err, req, res, next) => {
   const errorDetails = {
     message: err.message,
     status: err.status,
+    title: err.status,
     stackHighlighted: err.stack.replace(
       /[a-z_-\d]+.js:\d+:\d+/gi,
       '<mark>$&</mark>'
@@ -28,6 +29,7 @@ exports.productionErrors = (err, req, res, next) => {
   res.render('error', {
     message: err.message,
     status: err.status,
+    title: err.status,
     error: {}
   })
 }
