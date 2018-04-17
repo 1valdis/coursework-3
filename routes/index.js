@@ -13,6 +13,8 @@ router.get('/basket', catchAsyncErrors(storeController.getBasket))
 router.post('/basket/add', catchAsyncErrors(storeController.addToBasket))
 router.post('/basket/remove', catchAsyncErrors(storeController.removeFromBasket))
 
+router.post('/order', catchAsyncErrors(storeController.createOrder))
+
 router.get('/warranty', storeController.getWarranty)
 router.get('/delivery', storeController.getDelivery)
 router.get('/about', storeController.getAbout)

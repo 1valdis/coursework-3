@@ -5,22 +5,43 @@ include mixins/_pageH1
 block content
   +pageH1(title)
   //-pre= JSON.stringify(basket)
-  if basket.length===0
+  if basket.length !== 0
+    form(action="/order" method="POST").mb-4
+      fieldset
+        legend Оформить заказ
+        .row.form-group
+          label.col-12.col-md-2(for="input_lastname") Фамилия
+          input.col-12.col-md-10(type="text" name="lastname" id="input_lastname" required)
+        .row.form-group
+          label.col-12.col-md-2(for="input_firstname") Имя
+          input.mb-3.col-12.col-md-10.col-lg-2(type="text" name="firstname" id="input_firstname" required)
+          label.col-12.col-md-2(for="input_patronymic") Отчество
+          input.mb-3.col-12.col-md-10.col-lg-2(type="text" name="patronymic" id="input_patronymic" required)
+          label.col-12.col-md-2(for="input_phone") Мобильный телефон
+          input.mb-3.col-12.col-md-10.col-lg-2(type="tel" name="phone" id="input_phone" required)
+        .row.form-group
+          label.col-12.col-md-2(for="input_address") Адрес доставки
+          textarea.col-12.col-md-10(type="text" name="address" id="input_address" required)
+        .row.form-group
+          label.col-12.col-md-2(for="input_comments") Комментарии к заказу
+          textarea.col-12.col-md-10(type="text" name="comments" id="input_comments")
+        button.btn.btn-primary(type="submit") Заказать
+  if basket.length === 0
     p
       | Здесь пока пусто... Наведайтесь в 
       a(href="/catalogue") Каталог
       |  и закажите что-нибудь ;)
   each p in basket
-    .row.border
+    .row.border.text-center
       .col-sm-12.col-md-5
-        img.img-thumbnail(src="http://via.placeholder.com/350x150")
+        img.img-thumbnail(src="https://via.placeholder.com/350x150")
       .col-sm-12.col-md-4
         a(href=`/products/${p.id}`)
           h5= p.name
         p= h.cutString(p.description,100)
       .col-sm-12.col-md-3
-        h2.text-center= p.quantity+' шт.'
+        h2= p.quantity+' шт.'
         //-h2.text-center= 
-        form.text-center(method="POST" action="/basket/remove")
+        form(method="POST" action="/basket/remove")
           button.btn.btn-outline-danger Удалить
           input(type="hidden" name="product_id" value=p.id)
