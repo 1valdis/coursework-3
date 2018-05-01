@@ -67,7 +67,61 @@ create table order_items(
 
 create table baskets(
   id serial primary key,
-  sessionid text not null, -- Session id from express-session
+  session_id text not null, -- Session id from express-session
   product_id integer not null references products(id),
-  quantity integer not null
-)
+  quantity integer not null,
+  constraint unique_product_and_session unique(session_id, product_id)
+);
+
+create or replace function add_to_basket(_session_id text, _product_id integer, _quantity integer)
+	returns void as
+$$
+  declare
+    exists_in_basket integer;
+  begin
+    exists_in_basket:=(select count(*) from baskets where baskets.session_id=_session_id and baskets.product_id=_product_id);
+    
+    if exists_in_basket=0 then
+      insert into baskets(session_id, product_id, quantity) 
+        values(_session_id, _product_id, _quantity);
+    elsif exists_in_basket=1 then
+      update baskets set quantity = quantity+_quantity where session_id=_session_id and product_id=_product_id;
+    else
+      raise exception 'There should not be more than 1 row with unique product_id and session_id combination.';
+    end if;
+  end;
+$$ language plpgsql;
+--select add_to_basket('kek', 1, 228)
+
+create or replace function remove_from_basket(_session_id text, _product_id integer, _quantity integer)
+  returns void as
+$$
+  declare
+    product_row baskets%rowtype;
+  begin
+    
+    if (select count(*) from baskets where baskets.session_id = _session_id and baskets.product_id = _product_id) != 1 then
+      raise exception 'There should be one session and product combination';
+    else
+      select * into product_row from baskets where baskets.session_id = _session_id and baskets.product_id = _product_id;
+    end if;
+    
+    if product_row.quantity < _quantity then
+      raise exception 'You cannot remove from basket more that there is already';
+    elsif product_row.quantity = _quantity then
+      delete from baskets where id = product_row.id;
+    else
+      update baskets set quantity = quantity-_quantity where id = product_row.id;
+    end if;
+
+  end;
+$$ language plpgsql;
+--select remove_from_basket('kek', 2, 10);
+
+create or replace function remove_from_basket(_session_id text, _product_id integer)
+  returns void as
+$$
+  begin
+    delete from baskets where baskets.session_id = _session_id and baskets.product_id = _product_id;
+  end;
+$$ language plpgsql;

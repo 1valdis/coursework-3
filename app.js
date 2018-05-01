@@ -7,6 +7,7 @@ const flash = require('connect-flash')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const expressValidator = require('express-validator')
+const db = require('./db')
 
 const routes = require('./routes/index')
 const errorHandlers = require('./handlers/errorHandlers')
@@ -62,18 +63,17 @@ app.use(
 app.use(flash())
 
 // pass flashes to our templates
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   res.locals.h = helpers
   res.locals.flashes = req.flash()
   res.locals.currentPath = req.path
 
-  const countInBasket = (req.session && req.session.basket)
-    ? req.session.basket.reduce((prev, cur) => {
-      return prev + cur.quantity
-    }, 0)
+  const countInBasket = req.session && req.session.basketExists
+    ? (await db.baskets.quantityBySessionId(req.session.id)).sum
     : 0
 
   res.locals.countInBasket = countInBasket
+
   next()
 })
 

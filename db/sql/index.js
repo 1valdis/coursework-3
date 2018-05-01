@@ -13,7 +13,8 @@ module.exports = {
     byIds: sql('products/byIds.sql')
   },
   baskets: {
-    bySessionID: sql('baskets/bySessionID.sql')
+    bySessionId: sql('baskets/bySessionId.sql'),
+    quantityBySessionId: sql('baskets/quantityBySessionId.sql')
   }
 }
 
