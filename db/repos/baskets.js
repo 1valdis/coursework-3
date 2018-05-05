@@ -29,6 +29,10 @@ class BasketsRepository {
       ])
     }
   }
+
+  sumBySessionId (session_id) {
+    return this.db.one(sql.sumBySessionId, session_id)
+  }
 }
 
 module.exports = BasketsRepository

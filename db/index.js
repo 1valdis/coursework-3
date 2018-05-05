@@ -7,6 +7,7 @@ const pgp = require('pg-promise')({
     obj.products = new repos.Products(obj, pgp)
     obj.categories = new repos.Categories(obj, pgp)
     obj.baskets = new repos.Baskets(obj, pgp)
+    obj.orders = new repos.Orders(obj, pgp)
   }
 })
 

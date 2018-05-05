@@ -11,21 +11,25 @@ block content
         legend Оформить заказ
         .row.form-group
           label.col-12.col-md-2(for="input_lastname") Фамилия
-          input.col-12.col-md-10(type="text" name="lastname" id="input_lastname" required)
-        .row.form-group
+          input.col-12.col-md-10.col-lg-2(type="text" name="lastname" id="input_lastname" value="Иванов" required)
           label.col-12.col-md-2(for="input_firstname") Имя
-          input.mb-3.col-12.col-md-10.col-lg-2(type="text" name="firstname" id="input_firstname" required)
+          input.col-12.col-md-10.col-lg-2(type="text" name="firstname" id="input_firstname" value="Иван" required)
           label.col-12.col-md-2(for="input_patronymic") Отчество
-          input.mb-3.col-12.col-md-10.col-lg-2(type="text" name="patronymic" id="input_patronymic" required)
+          input.col-12.col-md-10.col-lg-2(type="text" name="patronymic" id="input_patronymic" value="Иванович" required)
+        .row.form-group
           label.col-12.col-md-2(for="input_phone") Мобильный телефон
-          input.mb-3.col-12.col-md-10.col-lg-2(type="tel" name="phone" id="input_phone" required)
+          input.col-12.col-md-10(type="tel" name="phone" id="input_phone" value="+380123456789" required)
         .row.form-group
           label.col-12.col-md-2(for="input_address") Адрес доставки
           textarea.col-12.col-md-10(type="text" name="address" id="input_address" required)
+            .
+              Нигде, г. Нигде, пр. Никакой 13/37
         .row.form-group
           label.col-12.col-md-2(for="input_comments") Комментарии к заказу
-          textarea.col-12.col-md-10(type="text" name="comments" id="input_comments")
-        button.btn.btn-primary(type="submit") Заказать
+          textarea.col-12.col-md-10(type="text" name="comments" id="input_comments") Тестовый заказ
+        h4
+          button.btn.btn-primary.mr-2(type="submit") Заказать
+          = sum+' грн.'
   if basket.length === 0
     p
       | Здесь пока пусто... Наведайтесь в 
@@ -37,10 +41,11 @@ block content
         img.img-thumbnail(src="https://via.placeholder.com/350x150")
       .col-sm-12.col-md-4
         a(href=`/products/${p.id}`)
-          h5= p.name
+          h4= p.name
+        h5= p.cost+' грн.'
         p= h.cutString(p.description,100)
       .col-sm-12.col-md-3
-        h2= p.quantity+' шт.'
+        h4= p.quantity+' шт. = '+p.price+' грн.'
         //-h2.text-center= 
         form(method="POST" action="/basket/remove")
           button.btn.btn-outline-danger Удалить

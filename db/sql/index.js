@@ -14,7 +14,11 @@ module.exports = {
   },
   baskets: {
     bySessionId: sql('baskets/bySessionId.sql'),
-    quantityBySessionId: sql('baskets/quantityBySessionId.sql')
+    quantityBySessionId: sql('baskets/quantityBySessionId.sql'),
+    sumBySessionId: sql('baskets/sumBySessionId.sql')
+  },
+  orders: {
+    makeOrder: sql('orders/makeOrder.sql')
   }
 }
 

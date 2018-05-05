@@ -1,0 +1,1 @@
+select make_order(${sessionId}, ${firstname}, ${lastname}, ${patronymic}, ${phone}, ${address}, ${details});

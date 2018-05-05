@@ -4,7 +4,7 @@ require('dotenv').config({path: 'variables.env'})
 const app = require('./app')
 const db = require('./db')
 
-Error.stackTraceLimit=Infinity
+Error.stackTraceLimit = Infinity
 
 app.set('port', process.env.PORT || 13375)
 const server = app.listen(app.get('port'), () => {

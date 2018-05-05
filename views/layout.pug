@@ -28,11 +28,14 @@ html(lang="en")
             a.nav-link(href="/delivery") Доставка
             a.nav-link(href="/about") О нас
           .nav.navbar-nav
-            a.nav-link(href="/basket")
+            a.nav-link(href="/basket" title="Корзина")
               img(src="/icons/shopping-cart.svg").mr-2
               strong= locals.countInBasket
-            a.nav-link(href="/orders")
+            a.nav-link(href="/orders" title="Заказы")
               img(src="/icons/list.svg")
+            if user
+              a.nav-link(href="/logout" title="Выйти")
+                img(src="/icons/logout.svg")
     
     
     .container

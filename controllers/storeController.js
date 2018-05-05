@@ -32,63 +32,28 @@ exports.getProductById = async (req, res) => {
 }
 
 exports.getBasket = async (req, res) => {
-  // if (!req.session.basketExists) {
-  //   return res.render('basket', {
-  //     title: 'Корзина',
-  //     basket: []
-  //   })
-  // }
   
-  const basket = await db.baskets.bySessionId(req.session.id)
-  
+  const [basket, sum] = await Promise.all([
+    db.baskets.bySessionId(req.session.id),
+    db.baskets.sumBySessionId(req.session.id)
+  ])
+
   res.render('basket', {
     title: 'Корзина',
-    basket
+    basket,
+    sum: sum.sum
   })
-
-  // const ids = req.session.basket.map(p => p.product_id)
-  // let basket
-
-  // if (ids.length !== 0) {
-  //   basket = (await db.products.byIds(ids)).map(p => {
-  //     const product = p
-  //     product.quantity = req.session.basket.find(
-  //       i => i.product_id === p.id
-  //     ).quantity
-  //     return product
-  //   })
-  // } else {
-  //   basket = []
-  // }
-
-  // res.render('basket', {
-  //   title: 'Корзина',
-  //   basket
-  // })
+  
 }
 
 exports.addToBasket = async (req, res) => {
   req.session.basketExists = true
 
-  await db.baskets.addToBasket(req.session.id, req.body.product_id, req.body.quantity)
-
-  // console.log(await db.baskets.bySessionId(req.session.id))
-
-  // if (!req.session.basket) {
-  //   req.session.basket = []
-  // }
-
-  // const existing = req.session.basket.find(
-  //   p => p.product_id === req.body.product_id
-  // )
-  // if (existing === undefined) {
-  //   req.session.basket.push({
-  //     product_id: req.body.product_id,
-  //     quantity: +req.body.quantity
-  //   })
-  // } else {
-  //   existing.quantity += +req.body.quantity
-  // }
+  await db.baskets.addToBasket(
+    req.session.id,
+    req.body.product_id,
+    req.body.quantity
+  )
 
   req.flash('success', 'Успешно добавлен в <a href="/basket">корзину</a>!')
   res.redirect('back')
@@ -101,8 +66,12 @@ exports.removeFromBasket = async (req, res) => {
     return
   }
 
-  await db.baskets.removeFromBasket(req.session.id, req.body.product_id, req.body.quantity)
-  
+  await db.baskets.removeFromBasket(
+    req.session.id,
+    req.body.product_id,
+    req.body.quantity
+  )
+
   req.flash('success', 'Удалено')
   res.redirect('back')
 }
