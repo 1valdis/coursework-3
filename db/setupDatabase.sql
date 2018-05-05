@@ -87,16 +87,19 @@ $$
     order_id integer;
     order_slug text;
   begin
+    if (select count(*) from baskets, products where products.id=baskets.product_id and baskets.session_id=_session_id)=0 then
+      raise exception 'Корзина пуста.';
+    end if;
     --creating new order row and getting its id
     insert into orders (order_status, firstname, lastname, patronymic, phone, address, details) values(
       (select id from order_statuses where name='Ожидает подтверждения'),
       _firstname, _lastname, _patronymic, _phone, _address, _details)
     returning id, slug into order_id, order_slug;
-    
+    --check for 0 in basket
     --inserting products from basket into order_items
     insert into order_items(product_id, order_id, quantity, price)
       select baskets.product_id, order_id, baskets.quantity,
-        (select cost from products, baskets where products.id=baskets.product_id) as price
+        (select cost from products where products.id=baskets.product_id) as price
     from baskets
     where baskets.session_id=_session_id;
     

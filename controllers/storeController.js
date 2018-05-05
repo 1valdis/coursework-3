@@ -32,7 +32,7 @@ exports.getProductById = async (req, res) => {
 }
 
 exports.getBasket = async (req, res) => {
-  
+
   const [basket, sum] = await Promise.all([
     db.baskets.bySessionId(req.session.id),
     db.baskets.sumBySessionId(req.session.id)
@@ -43,7 +43,7 @@ exports.getBasket = async (req, res) => {
     basket,
     sum: sum.sum
   })
-  
+
 }
 
 exports.addToBasket = async (req, res) => {
@@ -77,9 +77,18 @@ exports.removeFromBasket = async (req, res) => {
 }
 
 exports.createOrder = async (req, res) => {
-  console.log(req.body)
-  req.flash('success', 'Заказ успешно создан!')
-  res.redirect('back')
+  const orderDetails = {
+    sessionId: req.session.id,
+    ...req.body
+  }
+  try {
+    const slug = (await db.orders.makeOrder(orderDetails)).make_order
+    req.flash('success', 'Заказ успешно создан!')
+    res.redirect(`/orders/${slug}`)
+  } catch (e) {
+    req.flash('error', 'Ошибка при создании заказа: '+e.message)
+    res.redirect('back')
+  }
 }
 
 exports.getWarranty = (req, res) => {

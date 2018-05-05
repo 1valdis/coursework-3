@@ -20,7 +20,7 @@ class OrdersRepository {
    * @param {orderDetails} orderDetails
    */
   makeOrder (orderDetails) {
-    return this.pgp.one(sql.makeOrder, orderDetails)
+    return this.db.one(sql.makeOrder, orderDetails)
   }
 }
 
