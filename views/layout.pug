@@ -31,8 +31,10 @@ html(lang="en")
             a.nav-link(href="/basket" title="Корзина")
               img(src="/icons/shopping-cart.svg").mr-2
               strong= locals.countInBasket
-            a.nav-link(href="/orders" title="Заказы")
-              img(src="/icons/list.svg")
+            if locals.ordersCount>0
+              a.nav-link(href="/orders" title="Заказы")
+                img(src="/icons/list.svg").mr-2
+                strong= locals.ordersCount
             if user
               a.nav-link(href="/logout" title="Выйти")
                 img(src="/icons/logout.svg")

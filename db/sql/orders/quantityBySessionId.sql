@@ -1,1 +1,1 @@
-select sum(*) as quantity from orders where session_id=$1;
+select count(*) as quantity from orders where session_id=$1;

@@ -15,8 +15,8 @@ router.post('/basket/remove', catchAsyncErrors(storeController.removeFromBasket)
 
 router.post('/order', catchAsyncErrors(storeController.createOrder))
 // todo
-router.get('orders', catchAsyncErrors(storeController.getOrders))
-router.get('/order/:slug', catchAsyncErrors(storeController.getOrderById))
+router.get('/orders', catchAsyncErrors(storeController.getOrders))
+router.get('/orders/:slug', catchAsyncErrors(storeController.getOrderBySlug))
 
 router.get('/warranty', storeController.getWarranty)
 router.get('/delivery', storeController.getDelivery)

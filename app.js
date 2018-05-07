@@ -68,11 +68,9 @@ app.use(async (req, res, next) => {
   res.locals.flashes = req.flash()
   res.locals.currentPath = req.path
 
-  const countInBasket = req.session && req.session.basketExists
-    ? await db.baskets.quantityBySessionId(req.session.id)
-    : 0
+  res.locals.countInBasket = await db.baskets.quantityBySessionId(req.session.id)
 
-  res.locals.countInBasket = countInBasket
+  res.locals.ordersCount = await db.orders.quantityBySessionId(req.session.id)
 
   next()
 })

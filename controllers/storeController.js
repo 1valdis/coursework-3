@@ -95,8 +95,12 @@ exports.getOrders = async (req, res) => {
   
 }
 
-exports.getOrder = async (req, res)=>{
-  
+exports.getOrderBySlug = async (req, res)=>{
+  const [info, items] = await Promise.all([
+    db.orders.bySlug(req.params.slug),
+    db.orderItems.byOrderSlug(req.params.slug)
+  ])
+  res.render('order', {info, items, title: 'Заказ'})
 }
 
 exports.getWarranty = (req, res) => {

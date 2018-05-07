@@ -1,0 +1,41 @@
+extends layout
+
+include mixins/_pageH1
+
+block content
+  .row
+    .col-6
+      +pageH1(`${title} №${info.id}`)
+    .col-6.text-right
+      h1.mt-4
+        small=info.status_name
+  
+  .row
+    h5.col-12 #{info.lastname} #{info.firstname} #{info.patronymic}
+  .row
+    h5.col-6 
+      small #{info.phone}, #{info.address}
+    h5.col-6.text-right 
+      small #{info.date.toISOString().replace(/T/, ' ').replace(/\..+/, '')} UTC
+  
+  table.table
+    thead.thead-light
+      tr
+        th Название
+        th Количество
+        th Цена
+        th Сумма 
+    tbody
+      each i in items
+        tr
+          td
+            a(href=`/products/${i.id}`)= i.name
+          td= i.quantity+' шт.'
+          td= i.price+' грн.'
+          td= i.sum+' грн.'
+    tfoot
+      th(colspan=3) Всего
+      th= info.sum+' грн.'
+      
+  
+  small Скопируйте и сохраните ссылку, чтобы всегда иметь доступ к заказу.

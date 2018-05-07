@@ -1,1 +1,1 @@
-select order_items.*, products.name, products.description from order_items, products where order_items.product_id=products.id and order_id=$1;
+select order_items.*, order_items.*order_items.quantity as sum, products.name, products.description from order_items, products where order_items.product_id=products.id and order_id=$1;
