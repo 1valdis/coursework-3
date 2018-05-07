@@ -18,7 +18,15 @@ module.exports = {
     sumBySessionId: sql('baskets/sumBySessionId.sql')
   },
   orders: {
-    makeOrder: sql('orders/makeOrder.sql')
+    makeOrder: sql('orders/makeOrder.sql'),
+    byId: sql('orders/byId.sql'),
+    bySlug: sql('orders/bySlug.sql'),
+    bySessionId: sql('orders/bySessionId.sql'),
+    quantityBySessionId: sql('orders/quantityBySessionId.sql')
+  },
+  orderItems:{
+    byOrderId: sql('order_items/byOrderId.sql'),
+    byOrderSlug: sql('order_items/byOrderSlug.sql')
   }
 }
 

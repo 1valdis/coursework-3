@@ -1,0 +1,28 @@
+extends layout
+
+include mixins/_pageH1
+
+block content
+  +pageH1(title)
+  
+  if orders.length === 0
+    p
+      | Заказов пока нет... Наведайтесь в 
+      a(href="/catalogue") Каталог
+      |  и закажите что-нибудь ;)
+      
+  each p in orders
+    .row.border.text-center
+      .col-sm-12.col-md-5
+        img.img-thumbnail(src="https://via.placeholder.com/350x150")
+      .col-sm-12.col-md-4
+        a(href=`/products/${p.id}`)
+          h4= p.name
+        h5= p.cost+' грн.'
+        p= h.cutString(p.description,100)
+      .col-sm-12.col-md-3
+        h4= p.quantity+' шт. = '+p.price+' грн.'
+        //-h2.text-center= 
+        form(method="POST" action="/basket/remove")
+          button.btn.btn-outline-danger Удалить
+          input(type="hidden" name="product_id" value=p.id)

@@ -54,6 +54,7 @@ create extension if not exists "uuid-ossp";
 create table orders(
   id serial primary key,
   slug uuid not null unique default uuid_generate_v4(),
+  session_id text not null,
   order_status integer not null references order_statuses(id),
   date timestamp not null default transaction_timestamp(),
   firstname text not null,
@@ -91,7 +92,7 @@ $$
       raise exception 'Корзина пуста.';
     end if;
     --creating new order row and getting its id
-    insert into orders (order_status, firstname, lastname, patronymic, phone, address, details) values(
+    insert into orders (session_id, order_status, firstname, lastname, patronymic, phone, address, details) values( _session_id,
       (select id from order_statuses where name='Ожидает подтверждения'),
       _firstname, _lastname, _patronymic, _phone, _address, _details)
     returning id, slug into order_id, order_slug;
@@ -109,17 +110,9 @@ $$
     return order_slug;
   end;
 $$ language plpgsql;
--- insert into orders (id, order_status, firstname, lastname, patronymic, phone, address, details) values(
--- 	228,
---       (select id from order_statuses where name='Ожидает подтверждения'),
---       'kek', 'vlad', 'gooba', 'kekovich', '+22814881337', 'lol street 13/37', 'test');
 
--- insert into order_items(product_id, order_id, quantity, price)
---   select baskets.product_id, 228, baskets.quantity,
--- 	(select cost from products where products.id=baskets.product_id) as price
--- from products, baskets
--- where baskets.session_id='kek';
-
+--select add_to_basket('kek', 1, 2);
+--select add_to_basket('kek', 2, 3);
 --select make_order('kek', 'vlad', 'gooba', 'kekovich', '+22814881337', 'lol street 13/37', 'test');
 
 create or replace function add_to_basket(_session_id text, _product_id integer, _quantity integer)
@@ -140,7 +133,6 @@ $$
     end if;
   end;
 $$ language plpgsql;
---select add_to_basket('kek', 1, 228)
 
 create or replace function remove_from_basket(_session_id text, _product_id integer, _quantity integer)
   returns void as

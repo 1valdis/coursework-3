@@ -41,7 +41,7 @@ exports.getBasket = async (req, res) => {
   res.render('basket', {
     title: 'Корзина',
     basket,
-    sum: sum.sum
+    sum
   })
 
 }
@@ -89,6 +89,14 @@ exports.createOrder = async (req, res) => {
     req.flash('error', 'Ошибка при создании заказа: '+e.message)
     res.redirect('back')
   }
+}
+
+exports.getOrders = async (req, res) => {
+  
+}
+
+exports.getOrder = async (req, res)=>{
+  
 }
 
 exports.getWarranty = (req, res) => {

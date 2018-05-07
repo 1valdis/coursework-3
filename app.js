@@ -69,7 +69,7 @@ app.use(async (req, res, next) => {
   res.locals.currentPath = req.path
 
   const countInBasket = req.session && req.session.basketExists
-    ? (await db.baskets.quantityBySessionId(req.session.id)).sum
+    ? await db.baskets.quantityBySessionId(req.session.id)
     : 0
 
   res.locals.countInBasket = countInBasket

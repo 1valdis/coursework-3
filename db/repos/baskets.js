@@ -11,7 +11,7 @@ class BasketsRepository {
   }
 
   quantityBySessionId (id) {
-    return this.db.one(sql.quantityBySessionId, id)
+    return this.db.one(sql.quantityBySessionId, id).then(data=>data.quantity)
   }
 
   addToBasket (session_id, product_id, quantity) {
@@ -31,7 +31,7 @@ class BasketsRepository {
   }
 
   sumBySessionId (session_id) {
-    return this.db.one(sql.sumBySessionId, session_id)
+    return this.db.one(sql.sumBySessionId, session_id).then(data=>data.sum)
   }
 }
 
