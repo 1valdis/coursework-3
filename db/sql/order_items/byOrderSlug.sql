@@ -1,1 +1,1 @@
-select order_items.*, order_items.price*order_items.quantity as sum, products.name, products.description from order_items, products, orders where order_items.product_id=products.id and order_items.order_id=1 and orders.slug=$1;
+select order_items.*, order_items.price*order_items.quantity as sum, products.name, products.description from order_items, products, orders where order_items.product_id=products.id and order_items.order_id=orders.id and orders.slug=$1;

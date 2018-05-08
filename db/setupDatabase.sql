@@ -23,22 +23,6 @@ insert into products(category_id, name, description, count_available, cost) valu
   ((select id from categories where name='Сканеры'), 'Kool Scanner KEK-9000', 'Таки очень крутой сканер', 9000, 1005.00),
   ((select id from categories where name='Сканеры'), 'Kool Scanner KEK-9228', 'Ещё один очень крутой сканер The lysine contingency - it''s intended to prevent the spread of the animals is case they ever got off the island. Dr. Wu inserted a gene that makes a single faulty enzyme in protein metabolism. The animals can''t manufacture the amino acid lysine. Unless they''re continually supplied with lysine by us, they''ll slip into a coma and die.', 9000, 1234.56);
 
--- create table discounts(
---   id serial primary key,
---   product_id integer not null references products(id),
---   starts timestamp not null,
---   ends timestamp not null,
-  
---   percent integer,
---   sum numeric,
---   -- a discont should be set either as
---   -- a multiplier (20%) aka percent or
---   -- a specific sum (100 cu) aka sum
-  
---   -- now let's check at least one of them set
---   constraint check_discount check (percent is not null or sum is not null)
--- );
-
 create table order_statuses(
   id serial primary key,
   name varchar(50) not null,
@@ -88,6 +72,7 @@ $$
     order_id integer;
     order_slug text;
   begin
+    --check for 0 in basket
     if (select count(*) from baskets, products where products.id=baskets.product_id and baskets.session_id=_session_id)=0 then
       raise exception 'Корзина пуста.';
     end if;
@@ -96,7 +81,6 @@ $$
       (select id from order_statuses where name='Ожидает подтверждения'),
       _firstname, _lastname, _patronymic, _phone, _address, _details)
     returning id, slug into order_id, order_slug;
-    --check for 0 in basket
     --inserting products from basket into order_items
     insert into order_items(product_id, order_id, quantity, price)
       select baskets.product_id, order_id, baskets.quantity,

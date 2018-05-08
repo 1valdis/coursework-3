@@ -32,7 +32,6 @@ exports.getProductById = async (req, res) => {
 }
 
 exports.getBasket = async (req, res) => {
-
   const [basket, sum] = await Promise.all([
     db.baskets.bySessionId(req.session.id),
     db.baskets.sumBySessionId(req.session.id)
@@ -43,7 +42,6 @@ exports.getBasket = async (req, res) => {
     basket,
     sum
   })
-
 }
 
 exports.addToBasket = async (req, res) => {
@@ -92,7 +90,8 @@ exports.createOrder = async (req, res) => {
 }
 
 exports.getOrders = async (req, res) => {
-  
+  const orders = await db.orders.bySessionId(req.session.id)
+  res.render('orders', {orders, title: 'Заказы'})
 }
 
 exports.getOrderBySlug = async (req, res)=>{
