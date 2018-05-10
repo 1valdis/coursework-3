@@ -54,8 +54,8 @@ app.use(
     cookie: { secure: app.get('env') !== 'development' },
     resave: false,
     saveUninitialized: false,
-    rolling: true,
-    unset: 'destroy'
+    rolling: true//, // for debug purposes
+    // unset: 'destroy'
   })
 )
 
@@ -67,6 +67,7 @@ app.use(async (req, res, next) => {
   res.locals.h = helpers
   res.locals.flashes = req.flash()
   res.locals.currentPath = req.path
+  res.locals.user = req.user || null
 
   res.locals.countInBasket = await db.baskets.quantityBySessionId(req.session.id)
 

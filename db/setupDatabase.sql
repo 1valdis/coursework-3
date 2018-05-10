@@ -13,7 +13,7 @@ create table products(
   category_id integer not null references categories (Id) on delete cascade,
   name varchar(50) not null,
   description text,
-  count_available integer not null,
+  count_available integer not null check (count_available>=0),
   
   -- basic because will add possible discounts
   cost numeric not null
@@ -81,6 +81,17 @@ $$
       (select id from order_statuses where name='Ожидает подтверждения'),
       _firstname, _lastname, _patronymic, _phone, _address, _details)
     returning id, slug into order_id, order_slug;
+    
+    --update and check available quantity
+    begin
+      update products set count_available=count_available-baskets.quantity
+      from baskets
+      where products.id=baskets.product_id and baskets.session_id=_session_id;
+    exception
+      when check_violation then
+        raise exception 'В корзине больше товаров, чем имеется в наличии в данный момент.';
+    end;
+    
     --inserting products from basket into order_items
     insert into order_items(product_id, order_id, quantity, price)
       select baskets.product_id, order_id, baskets.quantity,

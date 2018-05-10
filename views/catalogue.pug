@@ -11,3 +11,5 @@ block content
           img.card-img-top
           a(href=`categories/${c.id}`): h5.card-title= c.name
           p.card-text= h.cutString(c.description, 100)
+          //if user
+          a.btn.btn-outline-primary(href=`/categories/${c.id}/edit`) Редактировать

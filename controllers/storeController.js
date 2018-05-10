@@ -84,7 +84,8 @@ exports.createOrder = async (req, res) => {
     req.flash('success', 'Заказ успешно создан!')
     res.redirect(`/orders/${slug}`)
   } catch (e) {
-    req.flash('error', 'Ошибка при создании заказа: '+e.message)
+    req.flash('danger', 'Ошибка при создании заказа:<br>'+e.message)
+    console.log(e)
     res.redirect('back')
   }
 }

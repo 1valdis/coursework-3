@@ -15,3 +15,5 @@ block content
           a(href=`/products/${p.id}`): h5.card-title= p.name
           p.card-text= h.cutString(p.description, 100)
           h5.card-text= p.cost+' грн.'
+          if user
+            a.btn.btn-outline-primary(href=`/products/${p.id}/edit`)
