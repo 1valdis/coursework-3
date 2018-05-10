@@ -47,6 +47,12 @@ exports.getBasket = async (req, res) => {
 exports.addToBasket = async (req, res) => {
   req.session.basketExists = true
 
+  if (!/^\d+$/.test(req.body.quantity)) {
+    req.flash('danger', 'Указано неправильное количество')
+    res.redirect('back')
+    return
+  }
+
   await db.baskets.addToBasket(
     req.session.id,
     req.body.product_id,
@@ -84,7 +90,7 @@ exports.createOrder = async (req, res) => {
     req.flash('success', 'Заказ успешно создан!')
     res.redirect(`/orders/${slug}`)
   } catch (e) {
-    req.flash('danger', 'Ошибка при создании заказа:<br>'+e.message)
+    req.flash('danger', 'Ошибка при создании заказа:<br>' + e.message)
     console.log(e)
     res.redirect('back')
   }
@@ -92,15 +98,22 @@ exports.createOrder = async (req, res) => {
 
 exports.getOrders = async (req, res) => {
   const orders = await db.orders.bySessionId(req.session.id)
-  res.render('orders', {orders, title: 'Заказы'})
+  res.render('orders', {
+    orders,
+    title: 'Заказы'
+  })
 }
 
-exports.getOrderBySlug = async (req, res)=>{
+exports.getOrderBySlug = async (req, res) => {
   const [info, items] = await Promise.all([
     db.orders.bySlug(req.params.slug),
     db.orderItems.byOrderSlug(req.params.slug)
   ])
-  res.render('order', {info, items, title: 'Заказ'})
+  res.render('order', {
+    info,
+    items,
+    title: 'Заказ'
+  })
 }
 
 exports.getWarranty = (req, res) => {
