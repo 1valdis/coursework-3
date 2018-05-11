@@ -84,29 +84,30 @@ exports.createOrder = async (req, res) => {
   let errMessages = ''
   
   if (!/^[a-zA-Zа-яА-ЯёЁ]{1,50}$/.test(req.body.firstname)) {
-    errMessages += 'Имя выглядит неправильно\n'
+    errMessages += 'Имя выглядит неправильно.'
   }
   if (
     !/^[a-zA-Zа-яА-ЯёЁ]{1,50}-?[a-zA-Zа-яА-ЯёЁ]{0,50}$/.test(req.body.lastname)
   ) {
-    errMessages += 'Фамилия выглядит неправильно\n'
+    errMessages += ' Фамилия выглядит неправильно.'
   }
   if (!/^[a-zA-Zа-яА-ЯёЁ]{1,50}$/.test(req.body.patronymic)) {
-    errMessages += 'Отчество выглядит неправильно\n'
+    errMessages += ' Отчество выглядит неправильно.'
   }
-  if (!/^[+]?[\d]{5,15}$/.test(req.body.patronymic)) {
-    errMessages += 'Номер телефона выглядит неправильно\n'
+  if (!/^[+]?[\d]{5,15}$/.test(req.body.phone)) {
+    errMessages += ' Номер телефона выглядит неправильно.'
   }
   if (req.body.address.length > 200 || req.body.address.length < 20) {
-    errMessages += 'Адрес выглядит неправильно\n'
+    errMessages += ' Адрес выглядит неправильно.'
   }
   if (req.body.details.length > 500) {
-    errMessages += 'Комментарии к заказу не должны превышать 500 символов\n'
+    errMessages += ' Комментарии к заказу не должны превышать 500 символов.'
   }
   
   if (errMessages !== '') {
     req.flash('danger', errMessages)
     res.redirect('back')
+    return
   }
   
   const orderDetails = {
