@@ -9,9 +9,9 @@ router.get('/catalogue', catchAsyncErrors(storeController.getCatalogue))
 router.get('/categories/:id', catchAsyncErrors(storeController.getProductsByCategory))
 router.get('/products/:id', catchAsyncErrors(storeController.getProductById))
 
-router.get('/basket', catchAsyncErrors(storeController.getBasket))
-router.post('/basket/add', catchAsyncErrors(storeController.addToBasket))
-router.post('/basket/remove', catchAsyncErrors(storeController.removeFromBasket))
+router.get('/cart', catchAsyncErrors(storeController.getCart))
+router.post('/cart/add', catchAsyncErrors(storeController.addToCart))
+router.post('/cart/remove', catchAsyncErrors(storeController.removeFromCart))
 
 router.post('/order', catchAsyncErrors(storeController.createOrder))
 // todo

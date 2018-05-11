@@ -1,6 +1,6 @@
-const sql = require('../sql').baskets
+const sql = require('../sql').carts
 
-class BasketsRepository {
+class CartsRepository {
   constructor (db, pgp) {
     this.db = db
     this.pgp = pgp
@@ -14,15 +14,15 @@ class BasketsRepository {
     return this.db.one(sql.quantityBySessionId, id).then(data=>data.quantity)
   }
 
-  addToBasket (session_id, product_id, quantity) {
-    return this.db.proc('add_to_basket', [session_id, product_id, quantity])
+  addToCart (session_id, product_id, quantity) {
+    return this.db.proc('add_to_cart', [session_id, product_id, quantity])
   }
 
-  removeFromBasket (session_id, product_id, quantity) {
+  removeFromCart (session_id, product_id, quantity) {
     if (quantity === undefined) {
-      return this.db.proc('remove_from_basket', [session_id, product_id])
+      return this.db.proc('remove_from_cart', [session_id, product_id])
     } else {
-      return this.db.proc('remove_from_basket', [
+      return this.db.proc('remove_from_cart', [
         session_id,
         product_id,
         quantity
@@ -35,4 +35,4 @@ class BasketsRepository {
   }
 }
 
-module.exports = BasketsRepository
+module.exports = CartsRepository

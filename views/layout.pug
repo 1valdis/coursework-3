@@ -28,9 +28,9 @@ html(lang="en")
             a.nav-link(href="/delivery") Доставка
             a.nav-link(href="/about") О нас
           .nav.navbar-nav
-            a.nav-link(href="/basket" title="Корзина")
+            a.nav-link(href="/cart" title="Корзина")
               img(src="/icons/shopping-cart.svg").mr-2
-              strong= locals.countInBasket
+              strong= locals.countInCart
             if locals.ordersCount>0
               a.nav-link(href="/orders" title="Заказы")
                 img(src="/icons/list.svg").mr-2

@@ -4,8 +4,8 @@ include mixins/_pageH1
 
 block content
   +pageH1(title)
-  //-pre= JSON.stringify(basket)
-  if basket.length !== 0
+  //-pre= JSON.stringify(cart)
+  if cart.length !== 0
     form(action="/order" method="POST").mb-4
       fieldset
         legend Оформить заказ
@@ -30,12 +30,12 @@ block content
         h4
           button.btn.btn-primary.mr-2(type="submit") Заказать
           = sum+' грн.'
-  if basket.length === 0
+  if cart.length === 0
     p
       | Здесь пока пусто... Наведайтесь в 
       a(href="/catalogue") Каталог
       |  и закажите что-нибудь ;)
-  each p in basket
+  each p in cart
     .row.border.text-center
       .col-sm-12.col-md-5
         img.img-thumbnail(src="https://via.placeholder.com/350x150")
@@ -47,6 +47,6 @@ block content
       .col-sm-12.col-md-3
         h4= p.quantity+' шт. = '+p.price+' грн.'
         //-h2.text-center= 
-        form(method="POST" action="/basket/remove")
+        form(method="POST" action="/cart/remove")
           button.btn.btn-outline-danger Удалить
           input(type="hidden" name="product_id" value=p.id)

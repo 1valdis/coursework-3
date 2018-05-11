@@ -31,21 +31,21 @@ exports.getProductById = async (req, res) => {
   })
 }
 
-exports.getBasket = async (req, res) => {
-  const [basket, sum] = await Promise.all([
-    db.baskets.bySessionId(req.session.id),
-    db.baskets.sumBySessionId(req.session.id)
+exports.getCart = async (req, res) => {
+  const [cart, sum] = await Promise.all([
+    db.carts.bySessionId(req.session.id),
+    db.carts.sumBySessionId(req.session.id)
   ])
 
-  res.render('basket', {
+  res.render('cart', {
     title: 'Корзина',
-    basket,
+    cart,
     sum
   })
 }
 
-exports.addToBasket = async (req, res) => {
-  req.session.basketExists = true
+exports.addToCart = async (req, res) => {
+  req.session.cartExists = true
 
   if (!/^\d+$/.test(req.body.quantity) || +req.body.quantity < 1) {
     req.flash('danger', 'Указано неправильное количество')
@@ -54,7 +54,7 @@ exports.addToBasket = async (req, res) => {
   }
 
   try {
-    await db.baskets.addToBasket(
+    await db.carts.addToCart(
       req.session.id,
       req.body.product_id,
       req.body.quantity
@@ -63,18 +63,18 @@ exports.addToBasket = async (req, res) => {
     req.flash('danger', 'Ошибка: ' + e.message)
   }
 
-  req.flash('success', 'Успешно добавлен в <a href="/basket">корзину</a>!')
+  req.flash('success', 'Успешно добавлен в <a href="/cart">корзину</a>!')
   res.redirect('back')
 }
 
-exports.removeFromBasket = async (req, res) => {
-  if (!req.session || !req.session.basketExists) {
+exports.removeFromCart = async (req, res) => {
+  if (!req.session || !req.session.cartExists) {
     req.flash('danger', 'Корзина пуста')
     res.redirect('back')
     return
   }
 
-  await db.baskets.removeFromBasket(
+  await db.carts.removeFromCart(
     req.session.id,
     req.body.product_id,
     req.body.quantity

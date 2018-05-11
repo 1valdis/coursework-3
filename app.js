@@ -39,7 +39,7 @@ app.use(cookieParser())
 // methods for data validation
 app.use(expressValidator())
 
-// session for flashes and basket
+// session for flashes and cart
 app.use(
   session({
     store: new RedisStore({
@@ -69,7 +69,7 @@ app.use(async (req, res, next) => {
   res.locals.currentPath = req.path
   res.locals.user = req.user || null
 
-  res.locals.countInBasket = await db.baskets.quantityBySessionId(req.session.id)
+  res.locals.countInCart = await db.carts.quantityBySessionId(req.session.id)
 
   res.locals.ordersCount = await db.orders.quantityBySessionId(req.session.id)
 

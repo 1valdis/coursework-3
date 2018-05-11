@@ -57,7 +57,7 @@ create table order_items(
   price numeric not null
 );
 
-create table baskets(
+create table carts(
   id serial primary key,
   session_id text not null, -- Session id from express-session
   product_id integer not null references products(id),
@@ -72,8 +72,8 @@ $$
     order_id integer;
     order_slug text;
   begin
-    --check for 0 in basket
-    if (select count(*) from baskets, products where products.id=baskets.product_id and baskets.session_id=_session_id)=0 then
+    --check for 0 in cart
+    if (select count(*) from carts, products where products.id=carts.product_id and carts.session_id=_session_id)=0 then
       raise exception 'Корзина пуста.';
     end if;
     --creating new order row and getting its id
@@ -84,37 +84,37 @@ $$
     
     --update and check available quantity
     begin
-      update products set count_available=count_available-baskets.quantity
-      from baskets
-      where products.id=baskets.product_id and baskets.session_id=_session_id;
+      update products set count_available=count_available-carts.quantity
+      from carts
+      where products.id=carts.product_id and carts.session_id=_session_id;
     exception
       when check_violation then
         raise exception 'В корзине больше товаров, чем имеется в наличии в данный момент.';
     end;
     
-    --inserting products from basket into order_items
+    --inserting products from cart into order_items
     insert into order_items(product_id, order_id, quantity, price)
-      select baskets.product_id, order_id, baskets.quantity,
-        (select cost from products where products.id=baskets.product_id) as price
-    from baskets
-    where baskets.session_id=_session_id;
+      select carts.product_id, order_id, carts.quantity,
+        (select cost from products where products.id=carts.product_id) as price
+    from carts
+    where carts.session_id=_session_id;
     
-    --deleting basket of this session
-    delete from baskets where session_id=_session_id;
+    --deleting cart of this session
+    delete from carts where session_id=_session_id;
     
     return order_slug;
   end;
 $$ language plpgsql;
 
---select add_to_basket('kek', 1, 2);
---select add_to_basket('kek', 2, 3);
+--select add_to_cart('kek', 1, 2);
+--select add_to_cart('kek', 2, 3);
 --select make_order('kek', 'vlad', 'gooba', 'kekovich', '+22814881337', 'lol street 13/37', 'test');
 
-create or replace function add_to_basket(_session_id text, _product_id integer, _quantity integer)
+create or replace function add_to_cart(_session_id text, _product_id integer, _quantity integer)
 	returns void as
 $$
   declare
-    exists_in_basket integer;
+    exists_in_cart integer;
     product_exists boolean;
   begin
     product_exists:=(select count(*) from products where id=_product_id)=1;
@@ -123,48 +123,48 @@ $$
       raise exception 'Такого товара не существует.';
     end if;
   
-    exists_in_basket:=(select count(*) from baskets where baskets.session_id=_session_id and baskets.product_id=_product_id);
+    exists_in_cart:=(select count(*) from carts where carts.session_id=_session_id and carts.product_id=_product_id);
     
-    if exists_in_basket=0 then
-      insert into baskets(session_id, product_id, quantity) 
+    if exists_in_cart=0 then
+      insert into carts(session_id, product_id, quantity) 
         values(_session_id, _product_id, _quantity);
-    elsif exists_in_basket=1 then
-      update baskets set quantity = quantity+_quantity where session_id=_session_id and product_id=_product_id;
+    elsif exists_in_cart=1 then
+      update carts set quantity = quantity+_quantity where session_id=_session_id and product_id=_product_id;
     else
       raise exception 'There should not be more than 1 row with unique product_id and session_id combination.';
     end if;
   end;
 $$ language plpgsql;
 
-create or replace function remove_from_basket(_session_id text, _product_id integer, _quantity integer)
+create or replace function remove_from_cart(_session_id text, _product_id integer, _quantity integer)
   returns void as
 $$
   declare
-    product_row baskets%rowtype;
+    product_row carts%rowtype;
   begin
     
-    if (select count(*) from baskets where baskets.session_id = _session_id and baskets.product_id = _product_id) != 1 then
+    if (select count(*) from carts where carts.session_id = _session_id and carts.product_id = _product_id) != 1 then
       raise exception 'There should be one session and product combination';
     else
-      select * into product_row from baskets where baskets.session_id = _session_id and baskets.product_id = _product_id;
+      select * into product_row from carts where carts.session_id = _session_id and carts.product_id = _product_id;
     end if;
     
     if product_row.quantity < _quantity then
-      raise exception 'You cannot remove from basket more that there is already';
+      raise exception 'You cannot remove from cart more that there is already';
     elsif product_row.quantity = _quantity then
-      delete from baskets where id = product_row.id;
+      delete from carts where id = product_row.id;
     else
-      update baskets set quantity = quantity-_quantity where id = product_row.id;
+      update carts set quantity = quantity-_quantity where id = product_row.id;
     end if;
 
   end;
 $$ language plpgsql;
---select remove_from_basket('kek', 2, 10);
+--select remove_from_cart('kek', 2, 10);
 
-create or replace function remove_from_basket(_session_id text, _product_id integer)
+create or replace function remove_from_cart(_session_id text, _product_id integer)
   returns void as
 $$
   begin
-    delete from baskets where baskets.session_id = _session_id and baskets.product_id = _product_id;
+    delete from carts where carts.session_id = _session_id and carts.product_id = _product_id;
   end;
 $$ language plpgsql;
