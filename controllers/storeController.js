@@ -99,10 +99,10 @@ exports.createOrder = async (req, res) => {
   if (!/^[+]?[\d]{5,15}$/.test(req.body.phone)) {
     errMessages += ' Номер телефона выглядит неправильно.'
   }
-  if (req.body.address.length > 200 || req.body.address.length < 20) {
+  if (!req.body.address || req.body.address.length > 200 || req.body.address.length < 20) {
     errMessages += ' Адрес выглядит неправильно.'
   }
-  if (req.body.details.length > 500) {
+  if (req.body.details && req.body.details.length > 500) {
     errMessages += ' Комментарии к заказу не должны превышать 500 символов.'
   }
 
