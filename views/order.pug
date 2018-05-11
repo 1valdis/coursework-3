@@ -29,7 +29,7 @@ block content
       each i in items
         tr
           td
-            a(href=`/products/${i.id}`)= i.name
+            a(href=`/products/${i.product_id}`)= i.name
           td= i.quantity+' шт.'
           td= i.price+' грн.'
           td= i.sum+' грн.'
