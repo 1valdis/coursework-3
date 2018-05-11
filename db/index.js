@@ -13,7 +13,7 @@ const pgp = require('pg-promise')({
 })
 
 // the standard string-to-Date conversion uses local time, not UTC. Let's fix it.
-pgp.pg.types.setTypeParser(1114, datestring => new Date(datestring+'Z'))
+pgp.pg.types.setTypeParser(1114, datestring => new Date(datestring + 'Z'))
 
 const db = pgp(process.env.POSTGRES_CONNECTION_STRING)
 

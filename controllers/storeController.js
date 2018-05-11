@@ -87,12 +87,15 @@ exports.removeFromCart = async (req, res) => {
 exports.createOrder = async (req, res) => {
   let errMessages = ''
 
+  req.body.firstname = req.body.firstname.trim()
   if (!/^[a-zA-Zа-яА-ЯёЁ]{1,50}$/.test(req.body.firstname)) {
     errMessages += 'Имя выглядит неправильно.'
   }
+  req.body.lastname = req.body.lastname.trim()
   if (!/^[a-zA-Zа-яА-ЯёЁ]{1,50}-?[a-zA-Zа-яА-ЯёЁ]{0,50}$/.test(req.body.lastname)) {
     errMessages += ' Фамилия выглядит неправильно.'
   }
+  req.body.patronymic = req.body.patronymic.trim()
   if (!/^[a-zA-Zа-яА-ЯёЁ]{1,50}$/.test(req.body.patronymic)) {
     errMessages += ' Отчество выглядит неправильно.'
   }

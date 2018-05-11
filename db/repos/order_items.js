@@ -5,11 +5,11 @@ class OrderItemsRepository {
     this.db = db
     this.pgp = pgp
   }
-  
-  byOrderId(orderId){
+
+  byOrderId (orderId) {
     return this.db.many(sql.byOrderId, orderId)
   }
-  byOrderSlug(orderSlug){
+  byOrderSlug (orderSlug) {
     return this.db.many(sql.byOrderSlug, orderSlug)
   }
 }

@@ -11,7 +11,7 @@ class CartsRepository {
   }
 
   quantityBySessionId (id) {
-    return this.db.one(sql.quantityBySessionId, id).then(data=>data.quantity)
+    return this.db.one(sql.quantityBySessionId, id).then(data => data.quantity)
   }
 
   addToCart (session_id, product_id, quantity) {
@@ -31,7 +31,7 @@ class CartsRepository {
   }
 
   sumBySessionId (session_id) {
-    return this.db.one(sql.sumBySessionId, session_id).then(data=>data.sum)
+    return this.db.one(sql.sumBySessionId, session_id).then(data => data.sum)
   }
 }
 
