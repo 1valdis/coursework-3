@@ -11,6 +11,6 @@ block content
       h5= product.cost+' грн.'
       form(method="post" action="/basket/add/").form-inline
         label(for="quantity") Количество
-        input.form-control.mr-3.ml-3(type="number" name="quantity" id="quantity" min=1 max=product.count_available value=1 required)
+        input.form-control.m-3(type="number" name="quantity" id="quantity" min=1 max=product.count_available value=1 required)
         input(type="hidden" name="product_id" value=product.id)
         button.btn.btn-success(type="submit") В корзину

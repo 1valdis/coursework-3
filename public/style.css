@@ -1,3 +1,6 @@
+* {
+  word-wrap: break-word;
+}
 .nav-link img{
   height: 1em;
   width: 1em;
