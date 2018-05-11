@@ -81,6 +81,34 @@ exports.removeFromBasket = async (req, res) => {
 }
 
 exports.createOrder = async (req, res) => {
+  let errMessages = ''
+  
+  if (!/^[a-zA-Zа-яА-ЯёЁ]{1,50}$/.test(req.body.firstname)) {
+    errMessages += 'Имя выглядит неправильно\n'
+  }
+  if (
+    !/^[a-zA-Zа-яА-ЯёЁ]{1,50}-?[a-zA-Zа-яА-ЯёЁ]{0,50}$/.test(req.body.lastname)
+  ) {
+    errMessages += 'Фамилия выглядит неправильно\n'
+  }
+  if (!/^[a-zA-Zа-яА-ЯёЁ]{1,50}$/.test(req.body.patronymic)) {
+    errMessages += 'Отчество выглядит неправильно\n'
+  }
+  if (!/^[+]?[\d]{5,15}$/.test(req.body.patronymic)) {
+    errMessages += 'Номер телефона выглядит неправильно\n'
+  }
+  if (req.body.address.length > 200 || req.body.address.length < 20) {
+    errMessages += 'Адрес выглядит неправильно\n'
+  }
+  if (req.body.details.length > 500) {
+    errMessages += 'Комментарии к заказу не должны превышать 500 символов\n'
+  }
+  
+  if (errMessages !== '') {
+    req.flash('danger', errMessages)
+    res.redirect('back')
+  }
+  
   const orderDetails = {
     sessionId: req.session.id,
     ...req.body
