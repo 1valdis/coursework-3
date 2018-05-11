@@ -53,11 +53,15 @@ exports.addToBasket = async (req, res) => {
     return
   }
 
-  await db.baskets.addToBasket(
-    req.session.id,
-    req.body.product_id,
-    req.body.quantity
-  )
+  try {
+    await db.baskets.addToBasket(
+      req.session.id,
+      req.body.product_id,
+      req.body.quantity
+    )
+  } catch (e) {
+    req.flash('danger', 'Ошибка: ' + e.message)
+  }
 
   req.flash('success', 'Успешно добавлен в <a href="/basket">корзину</a>!')
   res.redirect('back')
@@ -82,13 +86,11 @@ exports.removeFromBasket = async (req, res) => {
 
 exports.createOrder = async (req, res) => {
   let errMessages = ''
-  
+
   if (!/^[a-zA-Zа-яА-ЯёЁ]{1,50}$/.test(req.body.firstname)) {
     errMessages += 'Имя выглядит неправильно.'
   }
-  if (
-    !/^[a-zA-Zа-яА-ЯёЁ]{1,50}-?[a-zA-Zа-яА-ЯёЁ]{0,50}$/.test(req.body.lastname)
-  ) {
+  if (!/^[a-zA-Zа-яА-ЯёЁ]{1,50}-?[a-zA-Zа-яА-ЯёЁ]{0,50}$/.test(req.body.lastname)) {
     errMessages += ' Фамилия выглядит неправильно.'
   }
   if (!/^[a-zA-Zа-яА-ЯёЁ]{1,50}$/.test(req.body.patronymic)) {
@@ -103,13 +105,13 @@ exports.createOrder = async (req, res) => {
   if (req.body.details.length > 500) {
     errMessages += ' Комментарии к заказу не должны превышать 500 символов.'
   }
-  
+
   if (errMessages !== '') {
     req.flash('danger', errMessages)
     res.redirect('back')
     return
   }
-  
+
   const orderDetails = {
     sessionId: req.session.id,
     ...req.body

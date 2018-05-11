@@ -115,7 +115,14 @@ create or replace function add_to_basket(_session_id text, _product_id integer, 
 $$
   declare
     exists_in_basket integer;
+    product_exists boolean;
   begin
+    product_exists:=(select count(*) from products where id=_product_id)=1;
+    
+    if not product_exists then
+      raise exception 'Такого товара не существует.';
+    end if;
+  
     exists_in_basket:=(select count(*) from baskets where baskets.session_id=_session_id and baskets.product_id=_product_id);
     
     if exists_in_basket=0 then
