@@ -1,5 +1,7 @@
 // environment variables (node_env, secret keys...)
-require('dotenv').config({ path: 'variables.env' })
+require('dotenv').config({
+  path: 'variables.env'
+})
 
 const app = require('./app')
 const db = require('./db')
@@ -7,6 +9,10 @@ const db = require('./db')
 Error.stackTraceLimit = Infinity
 process.on('unhandledRejection', rej => {
   throw rej
+})
+process.on('uncaughtException', e => {
+  console.error(e.name, e.message)
+  process.exit(1)
 })
 
 app.set('port', process.env.PORT || 13375)
