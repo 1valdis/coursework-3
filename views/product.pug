@@ -9,8 +9,11 @@ block content
     .container.col-md-6.col-sm-12
       p= product.description
       h5= product.cost+' грн.'
-      form(method="post" action="/basket/add/").form-inline
-        label(for="quantity") Количество
-        input.form-control.m-3(type="number" name="quantity" id="quantity" min=1 max=product.count_available value=1 pattern="\d+" required)
-        input(type="hidden" name="product_id" value=product.id)
-        button.btn.btn-success(type="submit") В корзину
+      if (product.count_available>0)
+        form(method="post" action="/basket/add/").form-inline
+          label(for="quantity") Количество
+          input.form-control.m-3(type="number" name="quantity" id="quantity" min=1 max=product.count_available value=1 pattern="\d+" required)
+          input(type="hidden" name="product_id" value=product.id)
+          button.btn.btn-success(type="submit") В корзину
+      else
+        h5 Продано!
