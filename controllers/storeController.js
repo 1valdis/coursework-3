@@ -47,7 +47,7 @@ exports.getBasket = async (req, res) => {
 exports.addToBasket = async (req, res) => {
   req.session.basketExists = true
 
-  if (!/^\d+$/.test(req.body.quantity)) {
+  if (!/^\d+$/.test(req.body.quantity) || +req.body.quantity < 1) {
     req.flash('danger', 'Указано неправильное количество')
     res.redirect('back')
     return
