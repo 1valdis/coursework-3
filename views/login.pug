@@ -1,0 +1,12 @@
+extends layout
+
+include mixins/_pageH1
+
+block content
+  form.form-signin(action="/login", method="post")
+    +pageH1(title)
+    label(for="username") Имя пользователя
+    input.form-control(type="text" name="username")
+    label(for="password") Пароль
+    input.form-control(type="password" name="password")
+    button.btn.btn-primary.mt-3.text-center Войти

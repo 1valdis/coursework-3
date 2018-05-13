@@ -20,3 +20,7 @@
 html{
   min-width:300px;
 }
+.form-signin{
+  max-width: 30rem;
+  margin: auto;
+}
