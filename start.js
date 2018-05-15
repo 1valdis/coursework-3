@@ -10,10 +10,6 @@ Error.stackTraceLimit = Infinity
 process.on('unhandledRejection', rej => {
   throw rej
 })
-process.on('uncaughtException', e => {
-  console.error(e.name, e.message)
-  process.exit(1)
-})
 
 app.set('port', process.env.PORT || 13375)
 const server = app.listen(app.get('port'), () => {

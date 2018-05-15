@@ -27,6 +27,10 @@ module.exports = {
   orderItems: {
     byOrderId: sql('order_items/byOrderId.sql'),
     byOrderSlug: sql('order_items/byOrderSlug.sql')
+  },
+  admins: {
+    byId: sql('admins/byId'),
+    byUsername: sql('admins/byUsername.sql')
   }
 }
 

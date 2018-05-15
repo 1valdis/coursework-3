@@ -1,11 +1,20 @@
+const db = require('../db')
 const passport = require('passport')
 
-exports.login = passport.authenticate('local', {
-  failureRedirect: '/login',
-  failureFlash: 'Failed login',
-  successRedirect: '/',
-  successFlash: 'Welcome'
-})
+exports.login = (req, res, next) => {
+  passport.authenticate('local', function (err, user, info) {
+    if (err) {
+      req.flash('danger', err.message)
+      return res.redirect('back')
+    }
+    if (!user) {
+      req.flash('danger', 'Нипутю!')
+      return res.redirect('back')
+    }
+    req.flash('success', 'Вэлкам!')
+    res.redirect('/admin')
+  })(req, res, next)
+}
 
 exports.logout = (req, res) => {
   req.logout()

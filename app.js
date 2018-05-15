@@ -9,6 +9,9 @@ const cookieParser = require('cookie-parser')
 const expressValidator = require('express-validator')
 const db = require('./db')
 
+const passport = require('passport')
+require('./handlers/passport')
+
 const routes = require('./routes/index')
 const errorHandlers = require('./handlers/errorHandlers')
 const helpers = require('./helpers')
@@ -62,17 +65,21 @@ app.use(
 // The flash middleware lets us req.flash('error', 'SOMETHING IS WRONG!'), which will pass the message to the next page
 app.use(flash())
 
+// Passport is to authenticate admins
+app.use(passport.initialize())
+app.use(passport.session())
+
 // pass flashes to our templates
 app.use(async (req, res, next) => {
   res.locals.h = helpers
   res.locals.flashes = req.flash()
   res.locals.currentPath = req.path
   res.locals.user = req.user || null
-
+  
   res.locals.countInCart = await db.carts.quantityBySessionId(req.session.id)
-
+  
   res.locals.ordersCount = await db.orders.quantityBySessionId(req.session.id)
-
+  
   next()
 })
 
@@ -88,6 +95,10 @@ app.use(errorHandlers.notFound)
 if (app.get('env') === 'development') {
   // Development error handler - prints stack trace
   app.use(errorHandlers.developmentErrors)
+  process.on('uncaughtException', e => {
+    console.error(e.name, e.message)
+    process.exit(1)
+  })
 }
 
 // production error handler

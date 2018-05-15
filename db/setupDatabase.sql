@@ -171,7 +171,7 @@ $$ language plpgsql;
 
 create table admins(
   id serial primary key,
-  username text not null,
+  username text not null unique,
   password text not null,
   can_approve_admins boolean not null default false,
   can_edit_store boolean not null default false,

@@ -3,5 +3,6 @@ module.exports = {
   Categories: require('./categories'),
   Carts: require('./carts'),
   Orders: require('./orders'),
-  OrderItems: require('./order_items')
+  OrderItems: require('./order_items'),
+  Admins: require('./admins')
 }

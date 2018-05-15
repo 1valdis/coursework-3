@@ -28,5 +28,7 @@ router.get('/about', storeController.getAbout)
 // admin panel
 
 router.get('/login', adminController.loginForm)
+router.post('/login', authController.login)
+// router.post('/request', authController)
 
 module.exports = router
