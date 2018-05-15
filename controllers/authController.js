@@ -10,7 +10,7 @@ exports.login = (req, res, next) => {
       req.flash('danger', 'Нипутю!')
       return res.redirect('back')
     }
-    req.logIn(user, err => {
+    req.login(user, err => {
       if (err) {
         console.log('something is wrong: ', err)
         req.flash('danger', 'Что-то сломалось..')
@@ -23,8 +23,10 @@ exports.login = (req, res, next) => {
 }
 
 exports.logout = (req, res) => {
-  req.logout()
-  req.flash('success', 'Увидимся ;)')
+  if (req.user) {
+    req.logout()
+    req.flash('success', 'Увидимся ;)')
+  }
   res.redirect('/')
 }
 

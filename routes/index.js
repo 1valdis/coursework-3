@@ -30,6 +30,7 @@ router.get('/about', storeController.getAbout)
 router.get('/login', adminController.loginForm)
 router.post('/login', adminController.validateLoginForm, authController.login)
 router.post('/request', adminController.validateLoginForm, adminController.accessRequest)
+router.get('/logout', authController.logout)
 
 router.get('/admin', authController.isLoggedIn, adminController.adminPage)
 
