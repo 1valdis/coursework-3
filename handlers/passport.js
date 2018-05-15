@@ -10,7 +10,7 @@ passport.use(new LocalStrategy({
   try {
     const user = await db.admins.byUsername(username)
     if (user && await bcrypt.compare(password, user.password)) {
-      done(null, user)
+      return done(null, user)
     }
     done(null, false)
   } catch (e) {

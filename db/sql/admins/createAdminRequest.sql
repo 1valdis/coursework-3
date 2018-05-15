@@ -1,0 +1,1 @@
+insert into admin_requests(username, password) values($1, $2) on conflict do nothing;

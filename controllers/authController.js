@@ -1,4 +1,3 @@
-const db = require('../db')
 const passport = require('passport')
 
 exports.login = (req, res, next) => {
@@ -11,8 +10,15 @@ exports.login = (req, res, next) => {
       req.flash('danger', 'Нипутю!')
       return res.redirect('back')
     }
-    req.flash('success', 'Вэлкам!')
-    res.redirect('/admin')
+    req.logIn(user, err => {
+      if (err) {
+        console.log('something is wrong: ', err)
+        req.flash('danger', 'Что-то сломалось..')
+        return res.redirect('back')
+      }
+      req.flash('success', 'Вэлкам!')
+      res.redirect('/admin')
+    })
   })(req, res, next)
 }
 

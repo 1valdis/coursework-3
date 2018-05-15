@@ -11,6 +11,9 @@ class AdminsRepository {
   byUsername (username) {
     return this.db.oneOrNone(sql.byUsername, username)
   }
+  createAdminRequest (username, password) {
+    return this.db.any(sql.createAdminRequest, [username, password])
+  }
 }
 
 module.exports = AdminsRepository

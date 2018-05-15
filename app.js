@@ -53,7 +53,7 @@ app.use(
     }),
     secret: process.env.SECRET,
     maxAge: 1000 * 60 * 60 * 24 * 3, // 3 days
-    // if we're developing, cookie should not be secure for session to work, because we don't have https on localhost
+    // if we're developing, cookie must not be secure for session to work, because we don't have https on localhost
     cookie: { secure: app.get('env') !== 'development' },
     resave: false,
     saveUninitialized: false,
