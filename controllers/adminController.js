@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt')
 
 exports.loginForm = (req, res) => {
   if (req.user) {
-    //...
-    return res.redirect('/')
+    req.flash('Вы уже вошли')
+    return res.redirect('/admin')
   }
   res.render('login', {
     title: 'Вход'
@@ -20,16 +20,23 @@ exports.accessRequest = async (req, res) => {
 
 exports.validateLoginForm = (req, res, next) => {
   if (req.body.username.length > 100) {
-    req.flash('danger', 'Имя пользователя не может быть длиннее 100 символов')
-    return res.redirect('back')
+    return next('Имя пользователя не может быть длиннее 100 символов')
   }
   if (req.body.password.length > 72) {
-    req.flash('danger', 'Пароль не может быть длиннее 72 символов')
-    return res.redirect('back')
+    return next('Пароль не может быть длиннее 72 символов')
   }
   next()
 }
 
-exports.adminPage = (req, res)=>{
+exports.adminPage = (req, res) => {
   res.render('admin')
+}
+
+exports.adminPrivilege = (privelege) => {
+  return function (req, res, next) {
+    if (req.user && !req.user[privelege]) {
+      return next()
+    }
+    next(`У вас нет полномочий для этих действий.`)
+  }
 }

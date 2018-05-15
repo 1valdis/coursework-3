@@ -75,16 +75,16 @@ app.use(async (req, res, next) => {
   res.locals.flashes = req.flash()
   res.locals.currentPath = req.path
   res.locals.user = req.user || null
-  
   res.locals.countInCart = await db.carts.quantityBySessionId(req.session.id)
-  
   res.locals.ordersCount = await db.orders.quantityBySessionId(req.session.id)
-  
   next()
 })
 
 // after all, routes
 app.use('/', routes)
+
+// if that's an error with a typeof==='string', flash it and redirect back
+app.use(errorHandlers.textError)
 
 // if none of the above worked, 404
 app.use(errorHandlers.notFound)

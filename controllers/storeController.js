@@ -44,13 +44,11 @@ exports.getCart = async (req, res) => {
   })
 }
 
-exports.addToCart = async (req, res) => {
+exports.addToCart = async (req, res, next) => {
   req.session.cartExists = true
 
   if (!/^\d+$/.test(req.body.quantity) || +req.body.quantity < 1) {
-    req.flash('danger', 'Указано неправильное количество')
-    res.redirect('back')
-    return
+    return next('Указано неправильное количество')
   }
 
   try {
@@ -60,18 +58,16 @@ exports.addToCart = async (req, res) => {
       req.body.quantity
     )
   } catch (e) {
-    req.flash('danger', 'Ошибка: ' + e.message)
+    return next('Ошибка: ' + e.message)
   }
 
   req.flash('success', 'Успешно добавлен в <a href="/cart">корзину</a>!')
   res.redirect('back')
 }
 
-exports.removeFromCart = async (req, res) => {
+exports.removeFromCart = async (req, res, next) => {
   if (!req.session || !req.session.cartExists) {
-    req.flash('danger', 'Корзина пуста')
-    res.redirect('back')
-    return
+    return next('Корзина пуста')
   }
 
   await db.carts.removeFromCart(
@@ -84,7 +80,7 @@ exports.removeFromCart = async (req, res) => {
   res.redirect('back')
 }
 
-exports.createOrder = async (req, res) => {
+exports.createOrder = async (req, res, next) => {
   let errMessages = ''
 
   req.body.firstname = req.body.firstname.trim()
@@ -110,9 +106,7 @@ exports.createOrder = async (req, res) => {
   }
 
   if (errMessages !== '') {
-    req.flash('danger', errMessages)
-    res.redirect('back')
-    return
+    return next(errMessages)
   }
 
   const orderDetails = {
@@ -124,9 +118,7 @@ exports.createOrder = async (req, res) => {
     req.flash('success', 'Заказ успешно создан!')
     res.redirect(`/orders/${slug}`)
   } catch (e) {
-    req.flash('danger', 'Ошибка при создании заказа:<br>' + e.message)
-    console.log(e)
-    res.redirect('back')
+    return next('Ошибка при создании заказа:<br>' + e.message)
   }
 }
 

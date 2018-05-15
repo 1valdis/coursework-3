@@ -3,18 +3,15 @@ const passport = require('passport')
 exports.login = (req, res, next) => {
   passport.authenticate('local', function (err, user, info) {
     if (err) {
-      req.flash('danger', err.message)
-      return res.redirect('back')
+      return next(err.message)
     }
     if (!user) {
-      req.flash('danger', 'Нипутю!')
-      return res.redirect('back')
+      return next('Нипутю!')
     }
     req.login(user, err => {
       if (err) {
         console.log('something is wrong: ', err)
-        req.flash('danger', 'Что-то сломалось..')
-        return res.redirect('back')
+        return next('Что-то сломалось..')
       }
       req.flash('success', 'Вэлкам!')
       res.redirect('/admin')

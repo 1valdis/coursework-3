@@ -10,6 +10,14 @@ exports.notFound = (req, res, next) => {
   next(err)
 }
 
+exports.textError = (err, req, res, next) => {
+  if (typeof err === 'string') {
+    req.flash('danger', err)
+    return res.redirect('back')
+  }
+  next(err)
+}
+
 exports.developmentErrors = (err, req, res, next) => {
   err.stack = err.stack || ''
   const errorDetails = {
