@@ -29,7 +29,7 @@ exports.validateLoginForm = (req, res, next) => {
 }
 
 exports.adminPage = (req, res) => {
-  res.render('admin')
+  res.render('admin', {title: 'Админка'})
 }
 
 exports.adminPrivilege = (privelege) => {
@@ -39,4 +39,12 @@ exports.adminPrivilege = (privelege) => {
     }
     next(`У вас нет полномочий для этих действий.`)
   }
+}
+
+exports.editCategory = (req, res) => {
+
+}
+
+exports.createCategory = (req, res) => {
+  res.render('editCategory', {})
 }
