@@ -29,8 +29,21 @@ router.get('/about', storeController.getAbout)
 
 router.get('/login', adminController.loginForm)
 router.post('/login', adminController.validateLoginForm, authController.login)
-router.post('/request', adminController.validateLoginForm, adminController.accessRequest)
+router.post('/request', adminController.validateLoginForm, catchAsyncErrors(adminController.accessRequest))
 router.get('/logout', authController.logout)
+
+router.get('/admin/categories/edit/:id',
+  authController.isLoggedIn,
+  adminController.adminPrivilege('can_edit_store'),
+  catchAsyncErrors(adminController.editCategoryForm)
+)
+
+// todo: editing
+router.post('/admin/categories/edit/:id',
+  authController.isLoggedIn,
+  adminController.adminPrivilege('can_edit_store'),
+  catchAsyncErrors(adminController.updateCategory)
+)
 
 router.get('/admin', authController.isLoggedIn, adminController.adminPage)
 

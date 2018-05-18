@@ -9,11 +9,11 @@ block content
       .card.col-sm-12.col-md-6.col-lg-3
         .card-body.text-center
           img.card-img-top
-          a(href=`categories/${c.id}`): h5.card-title= c.name
+          a(href=`/categories/${c.id}`): h5.card-title= c.name
           p.card-text= h.cutString(c.description, 100)
           if user && user.can_edit_store
-            a.btn.btn-outline-primary(href=`/categories/${c.id}/edit`) Редактировать
+            a.btn.btn-outline-primary(href=`/admin/categories/edit/${c.id}`) Редактировать
     if user && user.can_edit_store
       .card.col-sm-12.col-md-6.col-lg-3
         .card-body.text-center
-          a.btn-lg.btn-primary(href=`categories/create`) Создать
+          a.btn-lg.btn-primary(href=`/admin/categories/create`) Создать
