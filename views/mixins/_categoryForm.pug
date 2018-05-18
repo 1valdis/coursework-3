@@ -1,7 +1,7 @@
 mixin categoryForm(category={})
   form(method="POST" enctype="multipart/form-data" url=`/admin/categories/${category.id?"edit/"+category.id:"create"}`)
     label(for="input_name") Название
-    input.form-control(name="name" id="input_name" value=category.name)
+    input.form-control(name="name" id="input_name" value=category.name required)
     .custom-file.mt-3
       input.custom-file-input(name="pic" id="input_pic" type="file")
       label.custom-file-label(for="pic_input") Картинка

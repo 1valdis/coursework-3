@@ -45,15 +45,15 @@ exports.editCategoryForm = async (req, res) => {
   const category = await db.categories.byId(req.params.id)
   res.render('editCategory', {title: `Редактирование ${category.name}`, category})
 }
-
 exports.createCategoryForm = (req, res) => {
   res.render('editCategory', {})
 }
-
 exports.updateCategory = async (req, res) => {
   console.log('TODO: UPDATE CATEGORY')
 }
-
 exports.createCategory = async (req, res) => {
   console.log('TODO: CREATE CATEGORY')
+}
+exports.deleteCategory = async (req, res) => {
+  console.log('TODO: DELETE CATEGORY')
 }

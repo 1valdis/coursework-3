@@ -32,19 +32,33 @@ router.post('/login', adminController.validateLoginForm, authController.login)
 router.post('/request', adminController.validateLoginForm, catchAsyncErrors(adminController.accessRequest))
 router.get('/logout', authController.logout)
 
+router.get('/admin', authController.isLoggedIn, adminController.adminPage)
+// let's go head-on right now and then will make a bit DRYer after it all wraps up
+router.get('/admin/categories/create',
+  authController.isLoggedIn,
+  adminController.adminPrivilege('can_edit_store'),
+  adminController.createCategoryForm
+)
+router.post('/admin/categories/create',
+  authController.isLoggedIn,
+  adminController.adminPrivilege('can_edit_store'),
+  catchAsyncErrors(adminController.createCategory)
+)
 router.get('/admin/categories/edit/:id',
   authController.isLoggedIn,
   adminController.adminPrivilege('can_edit_store'),
   catchAsyncErrors(adminController.editCategoryForm)
 )
-
 // todo: editing
 router.post('/admin/categories/edit/:id',
   authController.isLoggedIn,
   adminController.adminPrivilege('can_edit_store'),
   catchAsyncErrors(adminController.updateCategory)
 )
-
-router.get('/admin', authController.isLoggedIn, adminController.adminPage)
+router.post('/admin/categories/delete/:id',
+  authController.isLoggedIn,
+  adminController.adminPrivilege('can_edit_store'),
+  catchAsyncErrors(adminController.deleteCategory)
+)
 
 module.exports = router
