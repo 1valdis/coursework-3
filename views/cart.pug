@@ -11,22 +11,22 @@ block content
         legend Оформить заказ
         .row.form-group
           label.col-12.col-md-2(for="input_lastname") Фамилия
-          input.col-12.col-md-10.col-lg-2(type="text" name="lastname" id="input_lastname" value="Иванов" required)
+          input.col-12.col-md-10.col-lg-2#input_lastname(type="text" name="lastname" value="Иванов" required autofocus)
           label.col-12.col-md-2(for="input_firstname") Имя
-          input.col-12.col-md-10.col-lg-2(type="text" name="firstname" id="input_firstname" value="Иван" required)
+          input.col-12.col-md-10.col-lg-2#input_firstname(type="text" name="firstname" value="Иван" required)
           label.col-12.col-md-2(for="input_patronymic") Отчество
-          input.col-12.col-md-10.col-lg-2(type="text" name="patronymic" id="input_patronymic" value="Иванович" required)
+          input.col-12.col-md-10.col-lg-2#input_patronymic(type="text" name="patronymic" value="Иванович" required)
         .row.form-group
           label.col-12.col-md-2(for="input_phone") Мобильный телефон
-          input.col-12.col-md-10(type="tel" name="phone" id="input_phone" value="+380123456789" required)
+          input.col-12.col-md-10#input_phone(type="tel" name="phone" value="+380123456789" required)
         .row.form-group
           label.col-12.col-md-2(for="input_address") Адрес доставки
-          textarea.col-12.col-md-10(type="text" name="address" id="input_address" required)
+          textarea.col-12.col-md-10#input_address(type="text" name="address" required)
             .
               Нигде, г. Нигде, пр. Никакой 13/37
         .row.form-group
           label.col-12.col-md-2(for="input_details") Комментарии к заказу
-          textarea.col-12.col-md-10(type="text" name="details" id="input_details") Тестовый заказ
+          textarea.col-12.col-md-10#input_details(type="text" name="details") Тестовый заказ
         h4
           button.btn.btn-primary.mr-2(type="submit") Заказать
           = sum+' грн.'

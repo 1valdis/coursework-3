@@ -46,9 +46,9 @@ exports.editCategoryForm = async (req, res) => {
   res.render('editCategory', {title: `Редактирование ${category.name}`, category})
 }
 exports.createCategoryForm = (req, res) => {
-  res.render('editCategory', {})
+  res.render('editCategory', {title: `Создание категории`})
 }
-exports.updateCategory = async (req, res) => {
+exports.editCategory = async (req, res) => {
   console.log('TODO: UPDATE CATEGORY')
 }
 exports.createCategory = async (req, res) => {
@@ -56,4 +56,24 @@ exports.createCategory = async (req, res) => {
 }
 exports.deleteCategory = async (req, res) => {
   console.log('TODO: DELETE CATEGORY')
+}
+
+exports.editProductForm = async (req, res) => {
+  const [product, categories] = await Promise.all([
+    db.products.byId(req.params.id),
+    db.categories.all()
+  ])
+  res.render('editProduct', {title: `Редактирование ${product.name}`, product, categories})
+}
+exports.createProductForm = (req, res) => {
+  res.render('editProduct', {title: `Создание товара`})
+}
+exports.editProduct = async (req, res) => {
+  console.log('TODO: UPDATE PRODUCT')
+}
+exports.createProduct = async (req, res) => {
+  console.log('TODO: CREATE PRODUCT')
+}
+exports.deleteProduct = async (req, res) => {
+  console.log('TODO: DELETE PRODUCT')
 }

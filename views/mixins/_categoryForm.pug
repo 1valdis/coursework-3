@@ -1,12 +1,12 @@
 mixin categoryForm(category={})
   form(method="POST" enctype="multipart/form-data" url=`/admin/categories/${category.id?"edit/"+category.id:"create"}`)
     label(for="input_name") Название
-    input.form-control(name="name" id="input_name" value=category.name required)
+    input.form-control#input_name(name="name" value=category.name required autofocus)
     .custom-file.mt-3
-      input.custom-file-input(name="pic" id="input_pic" type="file")
-      label.custom-file-label(for="pic_input") Картинка
+      input.custom-file-input#input_pic(name="pic" type="file" accept="image/*")
+      label.custom-file-label(for="input_pic") Картинка
     label(for="input_description") Описание
-    textarea.form-control(id="input_description" maxlength="50000")= category.description
+    textarea.form-control#input_description(maxlength="50000")= category.description
     button.btn.btn-primary.mt-3 Отправить
   if category.id
     form(method="POST" url=`/admin/categories/delete/${category.id}`)

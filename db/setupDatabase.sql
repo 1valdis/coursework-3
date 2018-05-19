@@ -14,8 +14,6 @@ create table products(
   name varchar(50) not null,
   description text,
   count_available integer not null check (count_available>=0),
-  
-  -- basic because will add possible discounts
   cost numeric not null
 );
 
@@ -92,14 +90,14 @@ $$
         raise exception 'В корзине больше товаров, чем имеется в наличии в данный момент.';
     end;
     
-    --inserting products from cart into order_items
+    --insert products from cart into order_items
     insert into order_items(product_id, order_id, quantity, price)
       select carts.product_id, order_id, carts.quantity,
         (select cost from products where products.id=carts.product_id) as price
     from carts
     where carts.session_id=_session_id;
     
-    --deleting cart of this session
+    --delete cart of this session
     delete from carts where session_id=_session_id;
     
     return order_slug;

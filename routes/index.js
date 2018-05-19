@@ -53,12 +53,39 @@ router.get('/admin/categories/edit/:id',
 router.post('/admin/categories/edit/:id',
   authController.isLoggedIn,
   adminController.adminPrivilege('can_edit_store'),
-  catchAsyncErrors(adminController.updateCategory)
+  catchAsyncErrors(adminController.editCategory)
 )
 router.post('/admin/categories/delete/:id',
   authController.isLoggedIn,
   adminController.adminPrivilege('can_edit_store'),
   catchAsyncErrors(adminController.deleteCategory)
+)
+
+router.get('/admin/products/create',
+  authController.isLoggedIn,
+  adminController.adminPrivilege('can_edit_store'),
+  adminController.createProductForm
+)
+router.post('/admin/products/create',
+  authController.isLoggedIn,
+  adminController.adminPrivilege('can_edit_store'),
+  catchAsyncErrors(adminController.createProduct)
+)
+router.get('/admin/products/edit/:id',
+  authController.isLoggedIn,
+  adminController.adminPrivilege('can_edit_store'),
+  catchAsyncErrors(adminController.editProductForm)
+)
+// todo: editing
+router.post('/admin/products/edit/:id',
+  authController.isLoggedIn,
+  adminController.adminPrivilege('can_edit_store'),
+  catchAsyncErrors(adminController.editProduct)
+)
+router.post('/admin/products/delete/:id',
+  authController.isLoggedIn,
+  adminController.adminPrivilege('can_edit_store'),
+  catchAsyncErrors(adminController.deleteProduct)
 )
 
 module.exports = router

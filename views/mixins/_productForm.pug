@@ -1,0 +1,19 @@
+mixin productForm(categories = [], product = {})
+  form(method="POST" enctype="multipart/form-data" url=`/admin/products/${product.id?"/edit"+product.id:"/create"}`)
+    label(for="input_name") Название
+    input.form-control#input_name(name="name" value=product.name required autofocus)
+    -const category = categories.find(c=>c.id===product.category_id)
+    label(for="input_category") Категория
+    input.form-control#input_category(name="category" list="datalist_categories" value=category && category.name required)
+    datalist#datalist_categories
+      for c in categories
+        option(value=c.name)
+    .custom-file.mt-3
+      input.custom-file-input#input_pic(name="pic" type="file" accept="image/*")
+      label.custom-file-label(for="input_pic") Картинка
+    label(for="input_description") Описание
+    textarea.form-control#input_description(maxlength="50000")= product.description
+    button.btn.btn-primary.mt-3 Отправить
+  if product.id
+    form(method="POST" url=`/admin/products/delete/${product.id}`)
+      button.btn.btn-danger.mt-3 Удалить товар
