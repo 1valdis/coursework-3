@@ -1,5 +1,5 @@
 mixin categoryForm(category={})
-  form(method="POST" enctype="multipart/form-data" url=`/admin/categories/${category.id?"edit/"+category.id:"create"}`)
+  form(method="POST" enctype="multipart/form-data" action=`/admin/categories/${category.id?"edit/"+category.id:"create"}`)
     label(for="input_name") Название
     input.form-control#input_name(name="name" value=category.name required autofocus)
     .custom-file.mt-3
@@ -13,5 +13,5 @@ mixin categoryForm(category={})
     textarea.form-control#input_description(maxlength="50000" name="description")= category.description
     button.btn.btn-primary.mt-3 Отправить
   if category.id
-    form(method="POST" url=`/admin/categories/delete/${category.id}`)
+    form(method="POST" action=`/admin/categories/delete/${category.id}`)
       button.btn.btn-danger.mt-3 Удалить категорию

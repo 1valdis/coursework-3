@@ -173,8 +173,30 @@ exports.editCategory = async (req, res, next) => {
   req.flash('success', 'Категория обновлена.')
   res.redirect(`/categories/${req.params.id}`)
 }
-exports.deleteCategory = async (req, res) => {
-  console.log('TODO: DELETE CATEGORY')
+exports.deleteCategory = async (req, res, next) => {
+  const categoryDeleted = await db.categories.byId(req.params.id)
+
+  try {
+    await db.categories.deleteById(req.params.id)
+  } catch (e) {
+    req.flash('danger', 'Не получилось удалить категорию из бд...')
+    res.redirect('back')
+  }
+
+  if (categoryDeleted.image) {
+    try {
+      await unlink(path.join(__dirname, '../', 'public/storepictures/', categoryDeleted.image))
+    } catch (e) {
+      if (e.code !== 'ENOENT') {
+        return next(e)
+      } else {
+        req.flash('warning', 'Файла прошлой картинки не существовало... Странно.')
+      }
+    }
+  }
+
+  req.flash('success', 'Удалено')
+  res.redirect('/catalogue')
 }
 
 exports.editProductForm = async (req, res) => {

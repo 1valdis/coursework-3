@@ -1,5 +1,5 @@
 mixin productForm(categories = [], product = {})
-  form(method="POST" enctype="multipart/form-data" url=`/admin/products/${product.id?"/edit"+product.id:"/create"}`)
+  form(method="POST" enctype="multipart/form-data" action=`/admin/products/${product.id?"/edit"+product.id:"/create"}`)
     label(for="input_name") Название
     input.form-control#input_name(name="name" value=product.name required autofocus)
     -const category = categories.find(c=>c.id===product.category_id)
@@ -15,5 +15,5 @@ mixin productForm(categories = [], product = {})
     textarea.form-control#input_description(maxlength="50000")= product.description
     button.btn.btn-primary.mt-3 Отправить
   if product.id
-    form(method="POST" url=`/admin/products/delete/${product.id}`)
+    form(method="POST" action=`/admin/products/delete/${product.id}`)
       button.btn.btn-danger.mt-3 Удалить товар
