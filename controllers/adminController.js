@@ -199,16 +199,20 @@ exports.deleteCategory = async (req, res, next) => {
   res.redirect('/catalogue')
 }
 
-exports.editProductForm = async (req, res) => {
-  const [product, categories] = await Promise.all([
-    db.products.byId(req.params.id),
-    db.categories.all()
-  ])
-  res.render('editProduct', {
-    title: `Редактирование ${product.name}`,
-    product,
-    categories
-  })
+exports.editProductForm = async (req, res, next) => {
+  try {
+    const [product, categories] = await Promise.all([
+      db.products.byId(req.params.id),
+      db.categories.all()
+    ])
+    res.render('editProduct', {
+      title: `Редактирование ${product.name}`,
+      product,
+      categories
+    })
+  } catch (e) {
+    if (e.code === 0) next()
+  }
 }
 exports.createProductForm = (req, res) => {
   res.render('editProduct', {

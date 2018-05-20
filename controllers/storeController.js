@@ -12,23 +12,31 @@ exports.getCatalogue = async (req, res) => {
     categories
   })
 }
-exports.getProductsByCategory = async (req, res) => {
-  const [products, category] = await Promise.all([
-    db.products.byCategory(req.params.id),
-    db.categories.byId(req.params.id)
-  ])
-  res.render('products', {
-    title: category.name,
-    products,
-    category
-  })
+exports.getProductsByCategory = async (req, res, next) => {
+  try {
+    const [products, category] = await Promise.all([
+      db.products.byCategory(req.params.id),
+      db.categories.byId(req.params.id)
+    ])
+    res.render('products', {
+      title: category.name,
+      products,
+      category
+    })
+  } catch (e) {
+    if (e.code === 0) next()
+  }
 }
-exports.getProductById = async (req, res) => {
-  const product = await db.products.byId(req.params.id)
-  res.render('product', {
-    title: product.name,
-    product
-  })
+exports.getProductById = async (req, res, next) => {
+  try {
+    const product = await db.products.byId(req.params.id)
+    res.render('product', {
+      title: product.name,
+      product
+    })
+  } catch (e) {
+    if (e.code === 0) next()
+  }
 }
 
 exports.getCart = async (req, res) => {
@@ -130,16 +138,20 @@ exports.getOrders = async (req, res) => {
   })
 }
 
-exports.getOrderBySlug = async (req, res) => {
-  const [info, items] = await Promise.all([
-    db.orders.bySlug(req.params.slug),
-    db.orderItems.byOrderSlug(req.params.slug)
-  ])
-  res.render('order', {
-    info,
-    items,
-    title: 'Заказ'
-  })
+exports.getOrderBySlug = async (req, res, next) => {
+  try {
+    const [info, items] = await Promise.all([
+      db.orders.bySlug(req.params.slug),
+      db.orderItems.byOrderSlug(req.params.slug)
+    ])
+    res.render('order', {
+      info,
+      items,
+      title: 'Заказ'
+    })
+  } catch (e) {
+    if (e.code === 0) next()
+  }
 }
 
 exports.getWarranty = (req, res) => {
