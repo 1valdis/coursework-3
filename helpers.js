@@ -4,8 +4,7 @@ exports.cutString = (str, maxSymbols) =>
   (str && str.length > maxSymbols ? str.slice(0, maxSymbols) + '...' : str)
 
 exports.isImage = (buffer) => {
-  const header = buffer.toString('hex', 0, 5)
-  console.log(header)
+  const header = buffer.toString('hex', 0, 4)
   switch (header) {
     case '89504e47':
       return 'image/png'

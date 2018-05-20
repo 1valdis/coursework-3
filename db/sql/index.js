@@ -5,7 +5,9 @@ const QueryFile = require('pg-promise').QueryFile
 module.exports = {
   categories: {
     all: sql('categories/all.sql'),
-    byId: sql('categories/byId.sql')
+    byId: sql('categories/byId.sql'),
+    create: sql('categories/create.sql'),
+    deleteById: sql('categories/deleteById.sql')
   },
   products: {
     byCategory: sql('products/byCategory.sql'),

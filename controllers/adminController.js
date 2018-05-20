@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const util = require('util')
 const writeFile = util.promisify(fs.writeFile)
 
@@ -9,20 +10,7 @@ const multer = require('multer')
 const h = require('../helpers')
 
 const multerOptions = {
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 1000000
-  },
-  fileFilter (req, file, next) {
-    if (h.isImage(file.buffer)) {
-      next(null, true)
-    } else {
-      next('Это не картинка', false)
-    }
-  },
-  filename (req, file, next) {
-    next(null, `${file.fieldname}-${Date.now()}-${Math.floor(Math.random() * 1000000000)}`)
-  }
+  storage: multer.memoryStorage()
 }
 
 exports.upload = multer(multerOptions).single('pic')
@@ -69,6 +57,66 @@ exports.adminPrivilege = privilege => {
   }
 }
 
+exports.validateCategoryForm = (req, res, next) => {
+  let errMessages = ''
+  if (!/^.{1,50}$/.test(req.body.name)) {
+    errMessages += 'Имя не может быть длиннее 50 символов. '
+  }
+  if (req.body.description && req.body.description.length > 50000) {
+    errMessages += 'Описание не может быть длиннее 50 000 символов. '
+  }
+
+  if (req.file) {
+    if (req.file.size > 10000000) {
+      errMessages += 'Картинка не может превышать размером 10 Мб. '
+    }
+    if (!h.isImage(req.file.buffer)) {
+      errMessages += 'Выберите более распространённый формат для картинки.'
+    }
+  }
+
+  if (errMessages !== '') {
+    next(errMessages)
+  } else {
+    next()
+  }
+}
+exports.createCategoryForm = (req, res) => {
+  res.render('editCategory', {
+    title: `Создание категории`
+  })
+}
+exports.createCategory = async (req, res, next) => {
+  let extension, filename
+  if (req.file) {
+    extension = req.file.mimetype.split('/')[1]
+    filename = `${req.file.fieldname}-${Date.now()}-${Math.floor(Math.random() * 1000000000)}${extension ? '.' + extension : ''}`
+  }
+
+  let categoryId
+
+  try {
+    categoryId = await db.categories.create(req.body.name, req.body.description, filename)
+  } catch (e) {
+    if (e.code === '23505') {
+      next('Категория с таким названием уже существует')
+    }
+    return next(e)
+  }
+
+  if (req.file) {
+    try {
+      await writeFile(path.join(__dirname, '../', 'public/storepictures/', filename), req.file.buffer)
+      // in ideal world this not gonna happen but who knows
+    } catch (e) {
+      await db.categories.deleteById(categoryId)
+      return next('Проблема с загрузкой файла...')
+    }
+  }
+
+  req.flash('success', 'Категория создана.')
+  res.redirect('/catalogue')
+}
 exports.editCategoryForm = async (req, res) => {
   const category = await db.categories.byId(req.params.id)
   res.render('editCategory', {
@@ -76,16 +124,8 @@ exports.editCategoryForm = async (req, res) => {
     category
   })
 }
-exports.createCategoryForm = (req, res) => {
-  res.render('editCategory', {
-    title: `Создание категории`
-  })
-}
 exports.editCategory = async (req, res) => {
-  console.log('TODO: UPDATE CATEGORY')
-}
-exports.createCategory = async (req, res) => {
-  console.log('TODO: CREATE CATEGORY')
+
 }
 exports.deleteCategory = async (req, res) => {
   console.log('TODO: DELETE CATEGORY')

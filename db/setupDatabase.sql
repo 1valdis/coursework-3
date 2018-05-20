@@ -1,6 +1,7 @@
 create table categories(
   id serial primary key,
-  name varchar(50) not null,
+  name varchar(50) not null unique,
+  image text,
   description text
 );
 
@@ -10,8 +11,9 @@ insert into categories(name, description) values
 
 create table products(
   id serial primary key,
-  category_id integer not null references categories (Id) on delete cascade,
+  category_id integer not null references categories (id) on delete cascade,
   name varchar(50) not null,
+  image text,
   description text,
   count_available integer not null check (count_available>=0),
   cost numeric not null

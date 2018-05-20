@@ -42,6 +42,8 @@ router.get('/admin/categories/create',
 router.post('/admin/categories/create',
   authController.isLoggedIn,
   adminController.adminPrivilege('can_edit_store'),
+  adminController.upload,
+  adminController.validateCategoryForm,
   catchAsyncErrors(adminController.createCategory)
 )
 router.get('/admin/categories/edit/:id',

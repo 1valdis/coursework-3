@@ -5,8 +5,10 @@ mixin categoryForm(category={})
     .custom-file.mt-3
       input.custom-file-input#input_pic(name="pic" type="file" accept="image/*")
       label.custom-file-label(for="input_pic") Картинка
+    if category.image
+      img(src=`/storepictures/${category.image}`).img-fluid
     label(for="input_description") Описание
-    textarea.form-control#input_description(maxlength="50000")= category.description
+    textarea.form-control#input_description(maxlength="50000" name="description")= category.description
     button.btn.btn-primary.mt-3 Отправить
   if category.id
     form(method="POST" url=`/admin/categories/delete/${category.id}`)

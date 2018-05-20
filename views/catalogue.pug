@@ -8,7 +8,8 @@ block content
     each c in categories
       .card.col-sm-12.col-md-6.col-lg-3
         .card-body.text-center
-          img.card-img-top
+          if c.image
+            img.card-img-top(src=`/storepictures/${c.image}`)
           a(href=`/categories/${c.id}`): h5.card-title= c.name
           p.card-text= h.cutString(c.description, 100)
           if user && user.can_edit_store

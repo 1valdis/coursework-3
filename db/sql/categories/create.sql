@@ -1,0 +1,1 @@
+insert into categories(name, image, description) values(${name}, ${image}, ${description}) returning id;
