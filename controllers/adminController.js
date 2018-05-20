@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const util = require('util')
 const writeFile = util.promisify(fs.writeFile)
+const unlink = util.promisify(fs.unlink)
 
 const db = require('../db')
 const bcrypt = require('bcrypt')
@@ -115,7 +116,7 @@ exports.createCategory = async (req, res, next) => {
   }
 
   req.flash('success', 'Категория создана.')
-  res.redirect('/catalogue')
+  res.redirect(`/categories/${categoryId}`)
 }
 exports.editCategoryForm = async (req, res) => {
   const category = await db.categories.byId(req.params.id)
@@ -124,8 +125,53 @@ exports.editCategoryForm = async (req, res) => {
     category
   })
 }
-exports.editCategory = async (req, res) => {
+exports.editCategory = async (req, res, next) => {
+  const categoryEdited = await db.categories.byId(req.params.id)
 
+  if (!req.file && req.body.preserveimage) {
+    try {
+      await db.categories.updateById(req.params.id, req.body.name, req.body.description)
+    } catch (e) {
+      if (e.code === '23505') {
+        req.flash('danger', 'Категория с таким названием уже существует.')
+        return res.redirect('back')
+      }
+    }
+  } else {
+    const extension = req.file ? req.file.mimetype.split('/')[1] : null
+    const filename = req.file ? `${req.file.fieldname}-${Date.now()}-${Math.floor(Math.random() * 1000000000)}${extension ? '.' + extension : ''}` : null
+
+    try {
+      await db.categories.updateById(req.params.id, req.body.name, req.body.description, filename)
+    } catch (e) {
+      if (e.code === '23505') {
+        req.flash('danger', 'Категория с таким названием уже существует.')
+        return res.redirect('back')
+      }
+    }
+
+    if (categoryEdited.image) {
+      try {
+        await unlink(path.join(__dirname, '../', 'public/storepictures/', categoryEdited.image))
+      } catch (e) {
+        if (e.code !== 'ENOENT') {
+          return next(e)
+        } else {
+          req.flash('warning', 'Файла прошлой картинки не существовало... Странно.')
+        }
+      }
+    }
+    if (req.file) {
+      try {
+        await writeFile(path.join(__dirname, '../', 'public/storepictures/', filename), req.file.buffer)
+      } catch (e) {
+        return next(e)
+      }
+    }
+  }
+
+  req.flash('success', 'Категория обновлена.')
+  res.redirect(`/categories/${req.params.id}`)
 }
 exports.deleteCategory = async (req, res) => {
   console.log('TODO: DELETE CATEGORY')

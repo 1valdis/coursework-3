@@ -2,3 +2,4 @@ node_modules/
 *.log
 variables.env
 .vscode/
+public/storepictures

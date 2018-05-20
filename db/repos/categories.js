@@ -19,6 +19,13 @@ class CategoriesRepository {
       image
     }).then(data => data.id)
   }
+  updateById (id, name, description, image) {
+    if (image === undefined) {
+      return this.db.any(sql.updateByIdWithoutImage, {id, name, description})
+    } else {
+      return this.db.any(sql.updateByIdWithImage, {id, name, description, image})
+    }
+  }
   deleteById (id) {
     return this.db.any(sql.deleteById, id)
   }

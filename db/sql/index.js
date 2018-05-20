@@ -7,6 +7,8 @@ module.exports = {
     all: sql('categories/all.sql'),
     byId: sql('categories/byId.sql'),
     create: sql('categories/create.sql'),
+    updateByIdWithImage: sql('categories/updateByIdWithImage.sql'),
+    updateByIdWithoutImage: sql('categories/updateByIdWithoutImage.sql'),
     deleteById: sql('categories/deleteById.sql')
   },
   products: {

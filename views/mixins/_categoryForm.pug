@@ -7,7 +7,9 @@ mixin categoryForm(category={})
       label.custom-file-label(for="input_pic") Картинка
     if category.image
       img(src=`/storepictures/${category.image}`).img-fluid
-    label(for="input_description") Описание
+      label.form-check(title="Когда файл новой картинки не выбран - старую не удалять.")
+        input.form-check-input(type="checkbox" name="preserveimage" checked)
+        | Не удалять картинку
     textarea.form-control#input_description(maxlength="50000" name="description")= category.description
     button.btn.btn-primary.mt-3 Отправить
   if category.id

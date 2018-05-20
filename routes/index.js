@@ -55,6 +55,8 @@ router.get('/admin/categories/edit/:id',
 router.post('/admin/categories/edit/:id',
   authController.isLoggedIn,
   adminController.adminPrivilege('can_edit_store'),
+  adminController.upload,
+  adminController.validateCategoryForm,
   catchAsyncErrors(adminController.editCategory)
 )
 router.post('/admin/categories/delete/:id',
