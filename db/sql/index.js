@@ -14,7 +14,11 @@ module.exports = {
   products: {
     byCategory: sql('products/byCategory.sql'),
     byId: sql('products/byId.sql'),
-    byIds: sql('products/byIds.sql')
+    byIds: sql('products/byIds.sql'),
+    create: sql('products/create.sql'),
+    updateByIdWithImage: sql('products/updateByIdWithImage.sql'),
+    updateByIdWithoutImage: sql('products/updateByIdWithoutImage.sql'),
+    deleteById: sql('products/deleteById.sql')
   },
   carts: {
     bySessionId: sql('carts/bySessionId.sql'),

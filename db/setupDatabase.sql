@@ -12,7 +12,7 @@ insert into categories(name, description) values
 create table products(
   id serial primary key,
   category_id integer not null references categories (id) on delete cascade,
-  name varchar(50) not null,
+  name varchar(50) not null unique,
   image text,
   description text,
   count_available integer not null check (count_available>=0),

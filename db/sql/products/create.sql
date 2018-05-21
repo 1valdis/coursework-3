@@ -1,0 +1,1 @@
+insert into products (name, description, image, category_id, count_available, cost) values(${name}, ${description}, ${image}, (select id from categories where name=${category_name}), ${count_available}, ${cost}) returning id;

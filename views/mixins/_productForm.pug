@@ -1,10 +1,10 @@
 mixin productForm(categories = [], product = {})
-  form(method="POST" enctype="multipart/form-data" action=`/admin/products/${product.id?"/edit"+product.id:"/create"}`)
+  form(method="POST" enctype="multipart/form-data" action=`/admin/products/${product.id?"edit/"+product.id:"create"}`)
     label(for="input_name") Название
     input.form-control#input_name(name="name" value=product.name required autofocus)
     -const category = categories.find(c=>c.id===product.category_id)
     label(for="input_category") Категория
-    input.form-control#input_category(name="category" list="datalist_categories" value=category && category.name required)
+    input.form-control#input_category(name="category_name" list="datalist_categories" value=category && category.name required)
     datalist#datalist_categories
       for c in categories
         option(value=c.name)
@@ -12,7 +12,15 @@ mixin productForm(categories = [], product = {})
       input.custom-file-input#input_pic(name="pic" type="file" accept="image/*")
       label.custom-file-label(for="input_pic") Картинка
     label(for="input_description") Описание
-    textarea.form-control#input_description(maxlength="50000")= product.description
+    textarea.form-control#input_description(maxlength="50000" name="description")= product.description
+    label(for="input_cost") Стоимость
+    input.form-control#input_cost(type="number" name="cost" value=product.cost min="0.01" step="0.01" pattern="\d+[\.,]\d{2}" required)
+    if product.id
+      label(for="input_count_available_change") Изменение количества товара. Текущее доступное количество: #{product.count_available} шт.
+      input.form-control#input_count_available_change(type="number" name="count_available_change" value="0" step="1" required)
+    else
+      label(for="input_count_available") Начальное количество товара
+      input.form-control#input_count_available(type="number" name="count_available" value="0" step="1" pattern="\d+" required)
     button.btn.btn-primary.mt-3 Отправить
   if product.id
     form(method="POST" action=`/admin/products/delete/${product.id}`)

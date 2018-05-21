@@ -199,6 +199,83 @@ exports.deleteCategory = async (req, res, next) => {
   res.redirect('/catalogue')
 }
 
+exports.validateProductFrom = async (req, res, next) => {
+  let errMessages = ''
+  if (!/^.{1,50}$/.test(req.body.name)) {
+    errMessages += 'Название товара должно быть указано и не должно быть длиннее 50 символов. '
+  }
+  if (!/^.{1,50}$/.test(req.body.category_name)) {
+    errMessages += 'Категория должна быть указана и не должна быть длиннее 50 символов. '
+  }
+  if (req.body.description && req.body.description.length > 50000) {
+    errMessages += 'Описание не может быть больше 50 000 символов '
+  }
+  if (req.file) {
+    if (req.file.size > 10000000) {
+      errMessages += 'Картинка не может превышать размером 10 Мб. '
+    }
+    if (!h.isImage(req.file.buffer)) {
+      errMessages += 'Выберите более распространённый формат для картинки. '
+    }
+  }
+  if (!/^\d{1,100}[.,]\d{2}$/.test(req.body.cost)) {
+    errMessages += 'Цена имеет неправильный формат. '
+  } else {
+    req.body.cost = req.body.cost.replace(',', '.')
+  }
+  // if editing
+  if (req.params.id && !/^\-?\d{1,100}$/.test(req.body.count_available_change)) {
+    errMessages += 'Изменение доступного количества выглядит неправильно. '
+    // if creating
+  } else if (!/^\d{1,100}$/.test(req.body.count_available)) {
+    errMessages += 'Начальное доступное количество выглядит неправильно.'
+  }
+
+  if (errMessages !== '') {
+    return next(errMessages)
+  }
+  next()
+}
+exports.createProductForm = async (req, res) => {
+  res.render('editProduct', {
+    title: `Создание товара`,
+    categories: await db.categories.all()
+  })
+}
+exports.createProduct = async (req, res, next) => {
+  let extension, filename
+  if (req.file) {
+    extension = req.file.mimetype.split('/')[1]
+    filename = `${req.file.fieldname}-${Date.now()}-${Math.floor(Math.random() * 1000000000)}${extension ? '.' + extension : ''}`
+  }
+
+  let productId
+
+  try {
+    productId = await db.products.create({
+      ...req.body,
+      image: filename || null
+    })
+  } catch (e) {
+    if (e.code === '23505') {
+      next('Товар с таким названием уже существует')
+    }
+    return next(e)
+  }
+
+  if (req.file) {
+    try {
+      await writeFile(path.join(__dirname, '../', 'public/storepictures/', filename), req.file.buffer)
+      // in ideal world this not gonna happen but who knows
+    } catch (e) {
+      await db.products.deleteById(productId)
+      return next('Проблема с загрузкой файла...')
+    }
+  }
+
+  req.flash('success', 'Товар создан.')
+  res.redirect(`/products/${productId}`)
+}
 exports.editProductForm = async (req, res, next) => {
   try {
     const [product, categories] = await Promise.all([
@@ -214,16 +291,8 @@ exports.editProductForm = async (req, res, next) => {
     if (e.code === 0) next()
   }
 }
-exports.createProductForm = (req, res) => {
-  res.render('editProduct', {
-    title: `Создание товара`
-  })
-}
 exports.editProduct = async (req, res) => {
   console.log('TODO: UPDATE PRODUCT')
-}
-exports.createProduct = async (req, res) => {
-  console.log('TODO: CREATE PRODUCT')
 }
 exports.deleteProduct = async (req, res) => {
   console.log('TODO: DELETE PRODUCT')
