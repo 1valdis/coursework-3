@@ -11,6 +11,11 @@ mixin productForm(categories = [], product = {})
     .custom-file.mt-3
       input.custom-file-input#input_pic(name="pic" type="file" accept="image/*")
       label.custom-file-label(for="input_pic") Картинка
+    if product.image
+      img(src=`/storepictures/${product.image}`).img-fluid
+      label.form-check(title="Когда файл новой картинки не выбран - старую не удалять.")
+        input.form-check-input(type="checkbox" name="preserveimage" checked)
+        | Не удалять картинку
     label(for="input_description") Описание
     textarea.form-control#input_description(maxlength="50000" name="description")= product.description
     label(for="input_cost") Стоимость

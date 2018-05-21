@@ -224,10 +224,10 @@ exports.validateProductFrom = async (req, res, next) => {
     req.body.cost = req.body.cost.replace(',', '.')
   }
   // if editing
-  if (req.params.id && !/^\-?\d{1,100}$/.test(req.body.count_available_change)) {
+  if (req.params.id && !/^-?\d{1,100}$/.test(req.body.count_available_change)) {
     errMessages += 'Изменение доступного количества выглядит неправильно. '
     // if creating
-  } else if (!/^\d{1,100}$/.test(req.body.count_available)) {
+  } else if (!req.params.id && !/^\d{1,100}$/.test(req.body.count_available)) {
     errMessages += 'Начальное доступное количество выглядит неправильно.'
   }
 
@@ -291,8 +291,59 @@ exports.editProductForm = async (req, res, next) => {
     if (e.code === 0) next()
   }
 }
-exports.editProduct = async (req, res) => {
-  console.log('TODO: UPDATE PRODUCT')
+exports.editProduct = async (req, res, next) => {
+  const productEdited = await db.products.byId(req.params.id)
+
+  if (!req.file && req.body.preserveimage) {
+    try {
+      await db.products.updateById(req.params.id, {
+        ...req.body
+      })
+    } catch (e) {
+      if (e.code === '23505') {
+        req.flash('danger', 'Товар с таким названием уже существует.')
+        return res.redirect('back')
+      }
+    }
+  } else {
+    const extension = req.file ? req.file.mimetype.split('/')[1] : null
+    const filename = req.file ? `${req.file.fieldname}-${Date.now()}-${Math.floor(Math.random() * 1000000000)}${extension ? '.' + extension : ''}` : null
+
+    try {
+      await db.products.updateById(req.params.id, {
+        ...req.body,
+        image: filename
+      })
+    } catch (e) {
+      if (e.code === '23505') {
+        req.flash('danger', 'Товар с таким названием уже существует.')
+        return res.redirect('back')
+      }
+      return next(e)
+    }
+
+    if (productEdited.image) {
+      try {
+        await unlink(path.join(__dirname, '../', 'public/storepictures/', productEdited.image))
+      } catch (e) {
+        if (e.code !== 'ENOENT') {
+          return next(e)
+        } else {
+          req.flash('warning', 'Файла прошлой картинки не существовало... Странно.')
+        }
+      }
+    }
+    if (req.file) {
+      try {
+        await writeFile(path.join(__dirname, '../', 'public/storepictures/', filename), req.file.buffer)
+      } catch (e) {
+        return next(e)
+      }
+    }
+  }
+
+  req.flash('success', 'Товар обновлен.')
+  res.redirect(`/products/${req.params.id}`)
 }
 exports.deleteProduct = async (req, res) => {
   console.log('TODO: DELETE PRODUCT')

@@ -1,1 +1,1 @@
-update products set name=${name}, description=${description}, image=${image}, category_id=(select id from categories where name=${category_name}), count_available=count_available+${count_available}, cost=${cost} where id=${id};
+update products set name=${name}, description=${description}, image=${image}, category_id=(select id from categories where name=${category_name}), count_available=count_available+${count_available_change}, cost=${cost} where id=${id};

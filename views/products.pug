@@ -15,7 +15,7 @@ block content
       each p in products
         .card.col-sm-12.col-md-6.col-lg-3
           .card-body.text-center
-            img.card-img-top
+            img.card-img-top(src=p.image?`/storepictures/${p.image}`:`/placeholder.png`)
             a(href=`/products/${p.id}`): h5.card-title= p.name
             p.card-text= h.cutString(p.description, 100)
             h5.card-text= p.cost+' грн.'
