@@ -180,7 +180,7 @@ exports.deleteCategory = async (req, res, next) => {
     await db.categories.deleteById(req.params.id)
   } catch (e) {
     req.flash('danger', 'Не получилось удалить категорию из бд...')
-    res.redirect('back')
+    return res.redirect('back')
   }
 
   if (categoryDeleted.image) {
@@ -345,6 +345,28 @@ exports.editProduct = async (req, res, next) => {
   req.flash('success', 'Товар обновлен.')
   res.redirect(`/products/${req.params.id}`)
 }
-exports.deleteProduct = async (req, res) => {
-  console.log('TODO: DELETE PRODUCT')
+exports.deleteProduct = async (req, res, next) => {
+  const productDeleted = await db.products.byId(req.params.id)
+
+  try {
+    await db.products.deleteById(req.params.id)
+  } catch (e) {
+    req.flash('danger', 'Не получилось удалить товар из бд...')
+    return res.redirect('back')
+  }
+
+  if (productDeleted.image) {
+    try {
+      await unlink(path.join(__dirname, '../', 'public/storepictures/', productDeleted.image))
+    } catch (e) {
+      if (e.code !== 'ENOENT') {
+        return next(e)
+      } else {
+        req.flash('warning', 'Файла прошлой картинки не существовало... Странно.')
+      }
+    }
+  }
+
+  req.flash('success', 'Удалено')
+  res.redirect('/catalogue')
 }

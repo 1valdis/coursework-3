@@ -65,7 +65,6 @@ router
   .post('/admin/categories/delete/:id',
     authController.isLoggedIn,
     adminController.adminPrivilege('can_edit_store'),
-    adminController.deleteCategory,
     catchAsyncErrors(adminController.deleteCategory)
   )
 // products CrUD

@@ -26,6 +26,9 @@ class ProductsRepository {
       return this.db.any(sql.updateByIdWithImage, product)
     }
   }
+  deleteById (id) {
+    return this.db.any(sql.deleteById, id)
+  }
 }
 
 module.exports = ProductsRepository
