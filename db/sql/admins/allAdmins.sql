@@ -1,0 +1,1 @@
+select id, username, can_edit_store, can_edit_admins, can_manage_orders from admins;

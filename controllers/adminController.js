@@ -237,9 +237,14 @@ exports.validateProductFrom = async (req, res, next) => {
   next()
 }
 exports.createProductForm = async (req, res) => {
+  const product = {}
+  if (req.get('Referrer') && req.get('Referrer').match(/\/categories\/(\d+)$/)) {
+    product.category_id = +req.get('Referrer').match(/\/categories\/(\d+)$/)[1]
+  }
   res.render('editProduct', {
     title: `Создание товара`,
-    categories: await db.categories.all()
+    categories: await db.categories.all(),
+    product
   })
 }
 exports.createProduct = async (req, res, next) => {
@@ -302,8 +307,10 @@ exports.editProduct = async (req, res, next) => {
     } catch (e) {
       if (e.code === '23505') {
         req.flash('danger', 'Товар с таким названием уже существует.')
-        return res.redirect('back')
+      } else if (e.code === '23502' && e.column==='category_id') {
+        req.flash('danger', 'Такой категории не существует, пожалуйста, укажите существующую.')
       }
+      return res.redirect('back')
     }
   } else {
     const extension = req.file ? req.file.mimetype.split('/')[1] : null
@@ -369,4 +376,46 @@ exports.deleteProduct = async (req, res, next) => {
 
   req.flash('success', 'Удалено')
   res.redirect('/catalogue')
+}
+
+// admins & admin requests
+
+exports.getAdmins = async (req, res) => {
+  const [admins, adminRequests] = await Promise.all([
+    db.admins.allAdmins(),
+    db.admins.allRequests()
+  ])
+  res.render('admins', {title: 'Админы', admins, adminRequests})
+}
+exports.approveRequest = async (req, res) => {
+  const requestData = {
+    id: req.body.id,
+    can_edit_store: !!req.body.can_edit_store,
+    can_edit_admins: !!req.body.can_edit_admins,
+    can_manage_orders: !!req.body.can_manage_orders
+  }
+  await db.admins.approveRequest(requestData)
+  req.flash('success', 'Успешно')
+  res.redirect('back')
+}
+exports.deleteRequest = async (req, res) => {
+  await db.admins.deleteRequest(req.body.id)
+  req.flash('success', 'Удалено')
+  res.redirect('back')
+}
+exports.restrictAdmin = async (req, res) => {
+  const requestData = {
+    id: req.body.id,
+    can_edit_store: !!req.body.can_edit_store,
+    can_edit_admins: !!req.body.can_edit_admins,
+    can_manage_orders: !!req.body.can_manage_orders
+  }
+  await db.admins.editAdmin(requestData)
+  req.flash('success', 'Успешно')
+  res.redirect('back')
+}
+exports.deleteAdmin = async (req, res) => {
+  await db.admins.deleteAdmin(req.body.id)
+  req.flash('success', 'Удалено')
+  res.redirect('back')
 }

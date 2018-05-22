@@ -14,6 +14,24 @@ class AdminsRepository {
   createAdminRequest (username, password) {
     return this.db.any(sql.createAdminRequest, [username, password])
   }
+  allAdmins () {
+    return this.db.any(sql.allAdmins)
+  }
+  allRequests () {
+    return this.db.any(sql.allRequests)
+  }
+  approveRequest (request) {
+    return this.db.any(sql.approveRequest, request)
+  }
+  deleteRequest (id) {
+    return this.db.any(sql.deleteRequest, id)
+  }
+  editAdmin (data) {
+    return this.db.any(sql.editAdmin, data)
+  }
+  deleteAdmin (id) {
+    return this.db.any(sql.deleteAdmin, id)
+  }
 }
 
 module.exports = AdminsRepository

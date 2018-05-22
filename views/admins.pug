@@ -1,0 +1,52 @@
+extends layout
+
+include mixins/_pageH1
+
+block content
+  +pageH1('Админы')
+  table.table.table-responsive.mx-auto
+    thead.thead-light
+      tr
+        th Имя пользователя
+        th.d-none Форма
+        th Редактирование магазина?
+        th Редактирование админов?
+        th Управление заказами?
+        th
+        th
+    tbody
+      each a in admins
+        tr
+          td= a.username
+          td.d-none
+            form(id=`admin-form-${a.id}` action="/admin/admins/edit" method="POST")
+              input(type="hidden" name="id" value=a.id)
+          td: input(type="checkbox" name="can_edit_store" form=`admin-form-${a.id}` checked=a.can_edit_store)
+          td: input(type="checkbox" name="can_edit_admins" form=`admin-form-${a.id}` checked=a.can_edit_admins)
+          td: input(type="checkbox" name="can_manage_orders" form=`admin-form-${a.id}` checked=a.can_manage_orders)
+          td: input.btn.btn-outline-primary(type="submit" form=`admin-form-${a.id}` value="Изменить")
+          td: input.btn.btn-outline-danger(type="submit" form=`admin-form-${a.id}` formaction="/admin/admins/delete" value="Удалить")
+
+  +pageH1('Запросы на админов')
+  table.table.table-responsive.mx-auto
+    thead.thead-light
+      tr
+        th Имя пользователя
+        th.d-none Форма
+        th Редактирование магазина?
+        th Редактирование админов?
+        th Управление заказами?
+        th Добавить/заменить админа
+        th Удалить запрос
+    tbody
+      each a in adminRequests
+        tr
+          td= a.username
+          td.d-none
+            form(id=`request-form-${a.id}` action="/admin/requests/approve" method="POST")
+              input(type="hidden" name="id" value=a.id)
+          td: input(type="checkbox" name="can_edit_store" form=`request-form-${a.id}`)
+          td: input(type="checkbox" name="can_edit_admins" form=`request-form-${a.id}`)
+          td: input(type="checkbox" name="can_manage_orders" form=`request-form-${a.id}`)
+          td: input.btn.btn-outline-primary(type="submit" form=`request-form-${a.id}` value=admins.find(adm=>adm.username===a.username)?"Заменить":"Добавить")
+          td: input.btn.btn-outline-danger(type="submit" form=`request-form-${a.id}` formaction="/admin/requests/delete" value="Удалить")

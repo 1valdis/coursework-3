@@ -39,7 +39,13 @@ module.exports = {
   admins: {
     byId: sql('admins/byId.sql'),
     byUsername: sql('admins/byUsername.sql'),
-    createAdminRequest: sql('admins/createAdminRequest.sql')
+    createAdminRequest: sql('admins/createAdminRequest.sql'),
+    allAdmins: sql('admins/allAdmins.sql'),
+    allRequests: sql('admins/allRequests.sql'),
+    approveRequest: sql('admins/approveRequest.sql'),
+    deleteRequest: sql('admins/deleteRequest.sql'),
+    editAdmin: sql('admins/editAdmin'),
+    deleteAdmin: sql('admins/deleteAdmin.sql')
   }
 }
 

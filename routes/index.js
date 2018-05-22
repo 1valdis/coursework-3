@@ -98,4 +98,33 @@ router
     catchAsyncErrors(adminController.deleteProduct)
   )
 
+// admins
+
+  .get('/admin/admins',
+    authController.isLoggedIn,
+    adminController.adminPrivilege('can_edit_admins'),
+    catchAsyncErrors(adminController.getAdmins)
+  )
+
+  .post('/admin/requests/approve',
+    authController.isLoggedIn,
+    adminController.adminPrivilege('can_edit_admins'),
+    catchAsyncErrors(adminController.approveRequest)
+  )
+  .post('/admin/requests/delete',
+    authController.isLoggedIn,
+    adminController.adminPrivilege('can_edit_admins'),
+    catchAsyncErrors(adminController.deleteRequest)
+  )
+  .post('/admin/admins/edit',
+    authController.isLoggedIn,
+    adminController.adminPrivilege('can_edit_admins'),
+    catchAsyncErrors(adminController.restrictAdmin)
+  )
+  .post('/admin/admins/delete',
+    authController.isLoggedIn,
+    adminController.adminPrivilege('can_edit_admins'),
+    catchAsyncErrors(adminController.deleteAdmin)
+  )
+
 module.exports = router

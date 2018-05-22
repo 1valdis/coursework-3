@@ -1,0 +1,3 @@
+insert into admins(username, password, can_edit_store, can_edit_admins, can_manage_orders) values((select username from admin_requests where id=${id}), (select password from admin_requests where id=${id}), ${can_edit_store}, ${can_edit_admins}, ${can_manage_orders})
+on conflict (username) do update set (password, can_edit_store, can_edit_admins, can_manage_orders) = (excluded.password, excluded.can_edit_store, excluded.can_edit_admins, excluded.can_manage_orders);
+delete from admin_requests where id=${id};
