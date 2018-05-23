@@ -51,6 +51,9 @@ module.exports = {
     deleteRequest: sql('admins/deleteRequest.sql'),
     editAdmin: sql('admins/editAdmin'),
     deleteAdmin: sql('admins/deleteAdmin.sql')
+  },
+  site_visits: {
+    add: sql('site_visits/add.sql')
   }
 }
 

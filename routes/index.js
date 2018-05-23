@@ -9,6 +9,7 @@ const { catchAsyncErrors } = require('../handlers/errorHandlers')
 // store
 
 router
+  .use(storeController.statsCollection)
   .get('/', storeController.getIndex)
   .get('/catalogue', catchAsyncErrors(storeController.getCatalogue))
   .get('/categories/:id', catchAsyncErrors(storeController.getProductsByCategory))

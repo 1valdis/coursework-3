@@ -169,3 +169,10 @@ exports.getAbout = (req, res) => {
     title: 'О нас'
   })
 }
+
+exports.statsCollection = (req, res, next) => {
+  if (!req.originalUrl.startsWith('/storepictures') && !req.originalUrl.startsWith('/admin') && !req.originalUrl.startsWith('/orders/')) {
+    db.siteVisits.add(req.originalUrl)
+  }
+  next()
+}

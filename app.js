@@ -96,7 +96,7 @@ if (app.get('env') === 'development') {
   // Development error handler - prints stack trace
   app.use(errorHandlers.developmentErrors)
   process.on('uncaughtException', e => {
-    console.error(e.name, e.message)
+    console.error(e.name, e.message, e.stack)
     process.exit(1)
   })
 }

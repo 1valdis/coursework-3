@@ -5,5 +5,6 @@ module.exports = {
   Orders: require('./orders'),
   OrderItems: require('./order_items'),
   Admins: require('./admins'),
-  OrderStatuses: require('./order_statuses')
+  OrderStatuses: require('./order_statuses'),
+  SiteVisits: require('./site_visits')
 }

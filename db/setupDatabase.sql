@@ -49,7 +49,7 @@ create table orders(
 );
 
 create table order_items(
-  id serial primary key,
+  id bigserial primary key,
   product_id integer not null references products(id),
   order_id integer not null references orders(id),
   quantity integer not null,
@@ -181,4 +181,10 @@ create table admin_requests(
   id serial primary key,
   username text not null unique,
   password text not null
+);
+
+create table site_visits(
+  id bigserial primary key,
+  url text not null,
+  date timestamp default transaction_timestamp()
 );
