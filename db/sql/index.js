@@ -30,7 +30,12 @@ module.exports = {
     byId: sql('orders/byId.sql'),
     bySlug: sql('orders/bySlug.sql'),
     bySessionId: sql('orders/bySessionId.sql'),
-    quantityBySessionId: sql('orders/quantityBySessionId.sql')
+    quantityBySessionId: sql('orders/quantityBySessionId.sql'),
+    all: sql('orders/all.sql'),
+    updateById: sql('orders/updateById.sql')
+  },
+  order_statuses: {
+    all: sql('order_statuses/all.sql')
   },
   orderItems: {
     byOrderId: sql('order_items/byOrderId.sql'),

@@ -1,0 +1,28 @@
+extends layout
+
+include mixins/_pageH1
+
+block content
+  +pageH1(title)
+  
+  each o in orders
+    .row
+      .col-sm-12.col-md-6
+        a(href=`/orders/${o.slug}`)
+          h3 № #{o.id}
+        h5
+          | Товаров: #{o.quantity}
+          br
+          | На сумму #{o.sum} грн.
+      .col-sm-12.col-md-6
+        h5: small #{o.lastname} #{o.firstname} #{o.patronymic}
+        h5: small #{o.address}
+        form(method="POST" action=`/admin/orders/edit/${o.id}`)
+          .row
+            .col-auto
+              select.custom-select.d-inline(name="order_status")
+                each s in order_statuses
+                  option(value=s.id selected=s.id===o.order_status)= s.name
+            .col-auto
+              input.btn.btn-outline-primary(type="submit" value="Изменить")
+    hr

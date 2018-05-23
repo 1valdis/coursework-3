@@ -25,11 +25,10 @@ insert into products(category_id, name, description, count_available, cost) valu
 
 create table order_statuses(
   id serial primary key,
-  name varchar(50) not null,
-  description text
+  name varchar(50) not null unique,
 );
 
-insert into order_statuses(name, description) values ('Ожидает подтверждения', null), ('Подтверждён', null), ('Отправлен', null), ('Завершён', null), ('Отменён', null), ('Возвращён', null);
+insert into order_statuses(name) values ('Ожидает подтверждения'), ('Подтверждён'), ('Отправлен'), ('Завершён'), ('Отменён'), ('Возвращён');
 
 -- This is for UUID generation, so our Orders will have a URL-safe,
 -- unique identifiers such as: 

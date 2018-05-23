@@ -34,6 +34,12 @@ class OrdersRepository {
   quantityBySessionId (sessionId) {
     return this.db.one(sql.quantityBySessionId, sessionId).then(data => data.quantity)
   }
+  all () {
+    return this.db.any(sql.all)
+  }
+  updateById (id, order_status) {
+    return this.db.any(sql.updateById, {id, order_status})
+  }
 }
 
 module.exports = OrdersRepository

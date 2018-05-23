@@ -127,4 +127,18 @@ router
     catchAsyncErrors(adminController.deleteAdmin)
   )
 
+// orders
+
+  .get('/admin/orders',
+    authController.isLoggedIn,
+    adminController.adminPrivilege('can_manage_orders'),
+    catchAsyncErrors(adminController.getOrders)
+  )
+  .post('/admin/orders/edit/:id',
+    authController.isLoggedIn,
+    adminController.adminPrivilege('can_manage_orders'),
+    adminController.validateEditOrder,
+    catchAsyncErrors(adminController.editOrder)
+  )
+
 module.exports = router

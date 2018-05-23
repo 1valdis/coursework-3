@@ -4,5 +4,6 @@ module.exports = {
   Carts: require('./carts'),
   Orders: require('./orders'),
   OrderItems: require('./order_items'),
-  Admins: require('./admins')
+  Admins: require('./admins'),
+  OrderStatuses: require('./order_statuses')
 }

@@ -307,7 +307,7 @@ exports.editProduct = async (req, res, next) => {
     } catch (e) {
       if (e.code === '23505') {
         req.flash('danger', 'Товар с таким названием уже существует.')
-      } else if (e.code === '23502' && e.column==='category_id') {
+      } else if (e.code === '23502' && e.column === 'category_id') {
         req.flash('danger', 'Такой категории не существует, пожалуйста, укажите существующую.')
       }
       return res.redirect('back')
@@ -417,5 +417,35 @@ exports.restrictAdmin = async (req, res) => {
 exports.deleteAdmin = async (req, res) => {
   await db.admins.deleteAdmin(req.body.id)
   req.flash('success', 'Удалено')
+  res.redirect('back')
+}
+
+// orders
+
+exports.getOrders = async (req, res) => {
+  const [orders, order_statuses] = await Promise.all([
+    db.orders.all(),
+    db.orderStatuses.all()
+  ])
+  res.render('adminOrders', {title: 'Заказы', orders, order_statuses})
+}
+exports.validateEditOrder = (req, res, next) => {
+  let errMessages = ''
+  if (!/^\d{1,100}$/.test(req.params.id)) {
+    errMessages += 'Айди заказа выглядит неправильно. '
+  }
+  if (!/^\d{1,100}/.test(req.body.order_status)) {
+    errMessages += 'Айди статуса заказа выглядит неправильно.'
+  }
+
+  if (errMessages !== '') {
+    next(errMessages)
+  } else {
+    next()
+  }
+}
+exports.editOrder = async (req, res) => {
+  await db.orders.updateById(req.params.id, req.body.order_status)
+  req.flash('success', 'Обновлено')
   res.redirect('back')
 }
