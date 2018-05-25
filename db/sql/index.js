@@ -53,7 +53,8 @@ module.exports = {
     deleteAdmin: sql('admins/deleteAdmin.sql')
   },
   site_visits: {
-    add: sql('site_visits/add.sql')
+    add: sql('site_visits/add.sql'),
+    stats: sql('site_visits/stats.sql')
   }
 }
 

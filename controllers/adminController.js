@@ -43,9 +43,11 @@ exports.validateLoginForm = (req, res, next) => {
   next()
 }
 
-exports.adminPage = (req, res) => {
+exports.adminPage = async (req, res) => {
+  const stats = await db.siteVisits.stats()
   res.render('admin', {
-    title: 'Админка'
+    title: 'Админка',
+    stats
   })
 }
 
