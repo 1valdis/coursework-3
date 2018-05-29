@@ -25,7 +25,7 @@ insert into products(category_id, name, description, count_available, cost) valu
 
 create table order_statuses(
   id serial primary key,
-  name varchar(50) not null unique,
+  name varchar(50) not null unique
 );
 
 insert into order_statuses(name) values ('Ожидает подтверждения'), ('Подтверждён'), ('Отправлен'), ('Завершён'), ('Отменён'), ('Возвращён');
@@ -188,3 +188,45 @@ create table site_visits(
   url text not null,
   date timestamp default transaction_timestamp()
 );
+
+create table product_visits(
+  id bigserial primary key,
+  product_id integer not null,
+  date timestamp default transaction_timestamp()
+);
+
+create table cart_additions(
+  id bigserial primary key,
+  product_id integer not null references products(id),
+  quantity integer not null,
+  date timestamp default transaction_timestamp()
+);
+
+create or replace function cart_update_trigger()
+  returns trigger as
+$$
+  begin
+    insert into cart_additions(product_id, quantity) values(new.product_id, new.quantity-old.quantity);
+    return null;
+  end;
+$$ language plpgsql;
+
+create trigger cart_update
+  after update on carts
+  for each row
+  when (new.quantity>old.quantity)
+  execute procedure cart_update_trigger();
+  
+create or replace function cart_insert_trigger()
+  returns trigger as
+$$
+  begin
+    insert into cart_additions(product_id, quantity) values(new.product_id, new.quantity);
+    return null;
+  end;
+$$ language plpgsql;
+
+create trigger cart_insert
+  after insert on carts
+  for each row
+  execute procedure cart_insert_trigger();

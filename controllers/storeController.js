@@ -171,8 +171,24 @@ exports.getAbout = (req, res) => {
 }
 
 exports.statsCollection = (req, res, next) => {
-  if (!req.originalUrl.startsWith('/storepictures') && !req.originalUrl.startsWith('/admin') && !req.originalUrl.startsWith('/orders/')) {
-    db.siteVisits.add(req.originalUrl)
+  if (!req.originalUrl.startsWith('/storepictures') && !req.originalUrl.startsWith('/admin') && !req.originalUrl.startsWith('/login') && !req.originalUrl.startsWith('/logout') && !req.originalUrl.startsWith('/request')) {
+    let modifiedUrl = req.originalUrl
+
+    if (req.originalUrl.startsWith('/orders')) {
+      modifiedUrl = '/orders/*'
+    } else if (req.originalUrl.startsWith('/products')) {
+      modifiedUrl = '/products/*'
+    } else if (req.originalUrl.startsWith('/categories')) {
+      modifiedUrl = '/categories/*'
+    } else if (req.originalUrl.startsWith('/cart')) {
+      modifiedUrl = '/cart/*'
+    }
+
+    db.stats.addSiteVisit(modifiedUrl)
+  }
+  
+  if (req.originalUrl.startsWith('/products/')) {
+    db.stats.addProductVisit(req.originalUrl.split('/')[2])
   }
   next()
 }

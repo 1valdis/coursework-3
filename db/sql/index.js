@@ -52,9 +52,13 @@ module.exports = {
     editAdmin: sql('admins/editAdmin'),
     deleteAdmin: sql('admins/deleteAdmin.sql')
   },
-  site_visits: {
-    add: sql('site_visits/add.sql'),
-    stats: sql('site_visits/stats.sql')
+  stats: {
+    addSiteVisit: sql('stats/addSiteVisit.sql'),
+    siteVisits: sql('stats/siteVisits.sql'),
+    addProductVisit: sql('stats/addProductVisit.sql'),
+    productVisits: sql('stats/productVisits.sql'),
+    orders: sql('stats/orders.sql'),
+    carts: sql('stats/carts.sql')
   }
 }
 

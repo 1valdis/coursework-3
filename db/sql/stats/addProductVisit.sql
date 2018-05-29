@@ -1,0 +1,1 @@
+insert into product_visits(product_id) values($1);

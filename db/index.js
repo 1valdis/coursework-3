@@ -11,7 +11,7 @@ const pgp = require('pg-promise')({
     obj.orderStatuses = new repos.OrderStatuses(obj, pgp)
     obj.orderItems = new repos.OrderItems(obj, pgp)
     obj.admins = new repos.Admins(obj, pgp)
-    obj.siteVisits = new repos.SiteVisits(obj, pgp)
+    obj.stats = new repos.Stats(obj, pgp)
   }
 })
 

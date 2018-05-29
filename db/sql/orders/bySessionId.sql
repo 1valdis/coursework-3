@@ -1,4 +1,4 @@
-select orders.*, order_statuses.name as status_name, order_statuses.description as status_description, 
+select orders.*, order_statuses.name as status_name, 
 (select sum(quantity*price) from order_items where order_id=orders.id) as sum,
 (select sum(quantity) from order_items where order_id=orders.id) as quantity
 from orders, order_statuses

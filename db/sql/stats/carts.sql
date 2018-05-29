@@ -1,0 +1,1 @@
+select sum(quantity) as quantity, (select name from products where id=product_id) as name, product_id from cart_additions group by product_id;

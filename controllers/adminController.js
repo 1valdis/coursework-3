@@ -44,10 +44,15 @@ exports.validateLoginForm = (req, res, next) => {
 }
 
 exports.adminPage = async (req, res) => {
-  const stats = await db.siteVisits.stats()
+  const [siteVisits, productVisits, orders, carts] = await Promise.all([
+    db.stats.siteVisits(),
+    db.stats.productVisits(),
+    db.stats.orders(),
+    db.stats.carts()
+  ])
   res.render('admin', {
     title: 'Админка',
-    stats
+    stats: { siteVisits, productVisits, orders, carts }
   })
 }
 

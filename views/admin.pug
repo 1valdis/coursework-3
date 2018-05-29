@@ -7,34 +7,87 @@ block content
     +pageH1('Админка')
     h2 Статистика
     .row
-      .col-6
+      .col-12.col-lg-6
         h3 Визиты страниц сайта
-        canvas(id="sitevisits")
+        canvas(id="siteVisits")
+      .col-12.col-lg-6
+        h3 Визиты товаров
+        canvas(id="productVisits")
+      .col-12.col-lg-6
+        h3 Статусы заказов
+        canvas(id="orders")
+      .col-12.col-lg-6
+        h3 Добавления в корзину
+        canvas(id="carts")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js")
     script.
       const data = !{JSON.stringify(stats)}
-      Chart.Bar('sitevisits', {
+      
+      const colors = ['#3366CC','#DC3912','#FF9900','#109618','#990099','#3B3EAC','#0099C6','#DD4477','#66AA00','#B82E2E','#316395','#994499','#22AA99','#AAAA11','#6633CC','#E67300','#8B0707','#329262','#5574A6','#3B3EAC']
+      
+      const options = {
+        scales: {
+          xAxes: [{
+            gridLines: {
+              display: false
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              beginAtZero:true
+            }
+          }]
+        }
+      }
+      
+      const siteVisitsChart = new Chart('siteVisits', {
+        type: 'bar',
         data: {
-          labels: data.map(i=>i.url),
+          labels: data.siteVisits.map(i=>i.url),
           datasets: [{
             label: 'Количество визитов',
-            data: data.map(i=>+i.visits),
-            backgroundColor: 'rgb(0,0,0)',
-            hoverBackgroundColor: 'rgb(60,60,60)'
+            data: data.siteVisits.map(i=>i.visits),
+            backgroundColor: colors.slice(0, data.siteVisits.length)
           }]
         },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero:true
-              }
-            }],
-            xAxes: [{
-              gridLines: {
-                display: false
-              }
-            }]
-          }
-        }
+        options
+      })
+      
+      const productVisitsChart = new Chart('productVisits', {
+        type: 'bar',
+        data: {
+          labels: data.productVisits.map(i=>i.name),
+          datasets: [{
+            label: 'Количество визитов',
+            data: data.productVisits.map(i=>i.visits),
+            backgroundColor: colors.slice(0, data.productVisits.length)
+          }]
+        },
+        options
+      })
+      
+      const ordersChart = new Chart('orders', {
+        type: 'bar',
+        data: {
+          labels: data.orders.map(i=>i.status),
+          datasets: [{
+            label: 'Статусы заказов',
+            data: data.orders.map(i=>i.count),
+            backgroundColor: colors.slice(0, data.orders.length)
+          }]
+        },
+        options
+      })
+      
+      const cartsChart = new Chart('carts', {
+        type: 'bar',
+        data: {
+          labels: data.carts.map(i=>i.name),
+          datasets: [{
+            label: 'Количество товаров, добавленных в корзины',
+            data: data.carts.map(i=>i.quantity),
+            backgroundColor: colors.slice(0, data.carts.length)
+          }]
+        },
+        options
       })
