@@ -28,6 +28,15 @@ html(lang="ru")
             a.nav-link(href="/delivery") Доставка
             a.nav-link(href="/about") О нас
           .nav.navbar-nav
+            if user
+              .nav-item.dropdown
+                a.nav-link.dropdown-toggle(href="#" id="navbarDropdown" role="button" data-toggle="dropdown") Админ-меню
+                .dropdown-menu
+                  a.dropdown-item(href="/admin") Админка
+                  if user.can_edit_admins
+                    a.dropdown-item(href="/admin/admins") Админы
+                  if user.can_manage_orders
+                    a.dropdown-item(href="/admin/orders") Заказы
             a.nav-link(href="/cart" title="Корзина")
               img(src="/icons/shopping-cart.svg").mr-2
               strong= locals.countInCart
