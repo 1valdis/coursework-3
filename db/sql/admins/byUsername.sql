@@ -1,1 +1,1 @@
-select username, can_edit_admins, can_edit_store, can_manage_orders from admins where username=$1;
+select * from admins where username=$1;
