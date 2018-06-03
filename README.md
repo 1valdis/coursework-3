@@ -16,5 +16,5 @@ It's an online store. Features:
 * Redis - for fast sessions
 * Passport - for admins login
 * bcrypt - for secure password hashing
-* Multer - for categore/product image uploads
+* Multer - for category/product image uploads
 * Pug - as a templating engine
