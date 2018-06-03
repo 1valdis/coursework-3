@@ -1,6 +1,6 @@
 # coursework-3
 
-This is my course work for the 3rd year.
+This is my course work for the 3rd year. Demo [here](https://kursach3.squad47.tk).
 
 It's an online store. Features:
 * Product categories
