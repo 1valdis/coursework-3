@@ -7,16 +7,16 @@ block content
     +pageH1('Админка')
     h2 Статистика
     .row
-      .col-12.col-lg-6
+      section.col-12.col-lg-6
         h3 Визиты страниц сайта
         canvas(id="siteVisits")
-      .col-12.col-lg-6
+      section.col-12.col-lg-6
         h3 Визиты товаров
         canvas(id="productVisits")
-      .col-12.col-lg-6
+      section.col-12.col-lg-6
         h3 Статусы заказов
         canvas(id="orders")
-      .col-12.col-lg-6
+      section.col-12.col-lg-6
         h3 Добавления в корзину
         canvas(id="carts")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js")

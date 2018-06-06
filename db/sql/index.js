@@ -49,7 +49,7 @@ module.exports = {
     allRequests: sql('admins/allRequests.sql'),
     approveRequest: sql('admins/approveRequest.sql'),
     deleteRequest: sql('admins/deleteRequest.sql'),
-    editAdmin: sql('admins/editAdmin'),
+    editAdmin: sql('admins/editAdmin.sql'),
     deleteAdmin: sql('admins/deleteAdmin.sql')
   },
   stats: {
