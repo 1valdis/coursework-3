@@ -14,9 +14,11 @@ exports.getCatalogue = async (req, res) => {
 }
 exports.getProductsByCategory = async (req, res, next) => {
   try {
-    const [products, category] = await Promise.all([
-      db.products.byCategory(req.params.id),
-      db.categories.byId(req.params.id)
+    const [products, category] = await db.task(t => {
+      return t.batch([
+          t.products.byCategory(req.params.id),
+          t.categories.byId(req.params.id)        
+      ]);
     ])
     res.render('products', {
       title: category.name,
