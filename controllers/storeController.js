@@ -19,7 +19,7 @@ exports.getProductsByCategory = async (req, res, next) => {
           t.products.byCategory(req.params.id),
           t.categories.byId(req.params.id)        
       ]);
-    ])
+    });
     res.render('products', {
       title: category.name,
       products,
