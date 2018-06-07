@@ -16,10 +16,10 @@ exports.getProductsByCategory = async (req, res, next) => {
   try {
     const [products, category] = await db.task(t => {
       return t.batch([
-          t.products.byCategory(req.params.id),
-          t.categories.byId(req.params.id)        
-      ]);
-    });
+        t.products.byCategory(req.params.id),
+        t.categories.byId(req.params.id)
+      ])
+    })
     res.render('products', {
       title: category.name,
       products,
@@ -98,7 +98,9 @@ exports.createOrder = async (req, res, next) => {
     errMessages += 'Имя выглядит неправильно.'
   }
   req.body.lastname = req.body.lastname.trim()
-  if (!/^[a-zA-Zа-яА-ЯёЁ]{1,50}-?[a-zA-Zа-яА-ЯёЁ]{0,50}$/.test(req.body.lastname)) {
+  if (
+    !/^[a-zA-Zа-яА-ЯёЁ]{1,50}-?[a-zA-Zа-яА-ЯёЁ]{0,50}$/.test(req.body.lastname)
+  ) {
     errMessages += ' Фамилия выглядит неправильно.'
   }
   req.body.patronymic = req.body.patronymic.trim()
@@ -108,7 +110,11 @@ exports.createOrder = async (req, res, next) => {
   if (!/^[+]?[\d]{5,15}$/.test(req.body.phone)) {
     errMessages += ' Номер телефона выглядит неправильно.'
   }
-  if (!req.body.address || req.body.address.length > 200 || req.body.address.length < 20) {
+  if (
+    !req.body.address ||
+    req.body.address.length > 200 ||
+    req.body.address.length < 20
+  ) {
     errMessages += ' Адрес выглядит неправильно.'
   }
   if (req.body.details && req.body.details.length > 500) {
@@ -173,7 +179,13 @@ exports.getAbout = (req, res) => {
 }
 
 exports.statsCollection = (req, res, next) => {
-  if (!req.originalUrl.startsWith('/storepictures') && !req.originalUrl.startsWith('/admin') && !req.originalUrl.startsWith('/login') && !req.originalUrl.startsWith('/logout') && !req.originalUrl.startsWith('/request')) {
+  if (
+    !req.originalUrl.startsWith('/storepictures') &&
+    !req.originalUrl.startsWith('/admin') &&
+    !req.originalUrl.startsWith('/login') &&
+    !req.originalUrl.startsWith('/logout') &&
+    !req.originalUrl.startsWith('/request')
+  ) {
     let modifiedUrl = req.originalUrl
 
     if (req.originalUrl.startsWith('/orders')) {
@@ -188,7 +200,7 @@ exports.statsCollection = (req, res, next) => {
 
     db.stats.addSiteVisit(modifiedUrl)
   }
-  
+
   if (req.originalUrl.startsWith('/products/')) {
     db.stats.addProductVisit(req.originalUrl.split('/')[2])
   }
