@@ -1,6 +1,10 @@
 # coursework-3
 
-This is my course work for the 3rd year. Demo [here](https://kursach3.squad47.tk).
+This is my course work for the 3rd year.
+
+Demo is [here](https://kursach3.squad47.tk), it will be available till fall of 2018 unless I need it to stay. As this course work has been passed (successfully), the repository is archived until I need to change something here.
+
+The example of variables.env needed for launch is in variables.env.example.
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
