@@ -2,7 +2,7 @@
 
 This is my course work for the 3rd year.
 
-Demo is [here](https://kursach3.squad47.tk), it will be available till fall of 2018 unless I need it to stay. As this course work has been passed (successfully), the repository is archived until I need to change something here.
+Demo is [here](https://kursach3.squad47.tk), it will be available till fall of 2018 unless I need it to stay. As this course work has been passed (successfully), the repository will be inactive until I need to change something here.
 
 The example of variables.env needed for launch is in variables.env.example.
 
